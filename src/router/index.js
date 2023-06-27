@@ -1,7 +1,6 @@
 const fs = require('fs')
 
 function registerRouters(app) {
-
   const files = fs.readdirSync(__dirname)
 
   for (const file of files) {

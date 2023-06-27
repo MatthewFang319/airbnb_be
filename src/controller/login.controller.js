@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const { PRIVATE_KEY } = require('../config/secrect')
 
 class LoginController {
-  sign(ctx, next) {
+  sign(ctx) {
     // 1.获取用户信息
     const { id, username } = ctx.user
 
@@ -15,10 +15,10 @@ class LoginController {
     // 3.返回用户信息
     const data = {
       userId: id,
-      username: username,
+      username,
       token
     }
-    ctx.body = { code: 200, message: "登录成功~", data }
+    ctx.body = { code: 200, msg: '登录成功~', data }
   }
 }
 

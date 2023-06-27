@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/main.js"
+    "lint": "eslint src --ext .js --cache --fix",
+    "start": "eslint src --ext .js --cache --fix && nodemon ./src/main.js",
+    "prepare": "husky install",
+    "commit": "git-cz"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,32 @@
   "dependencies": {
     "@koa/router": "^12.0.0",
     "dotenv": "^16.3.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "jsonwebtoken": "^9.0.0",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.1",
     "mysql2": "^3.4.1",
     "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^17.6.6",
+    "commitizen": "^4.3.0",
+    "commitlint": "^17.6.6",
+    "commitlint-config-cz": "^0.13.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
   }
 }

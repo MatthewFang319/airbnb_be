@@ -6,9 +6,9 @@ const { verifyAuth } = require('../middleware/login.middleware')
 // 更新用户信息
 userRouter.post('/', verifyAuth, updateUserInfo)
 
-userRouter.get('/:id', (ctx, next) => {
-    const id = ctx.params.id
-    ctx.body = "获取某个用户的数据:" + id
+userRouter.get('/:id', ctx => {
+  const id = ctx.params.id
+  ctx.body = '获取某个用户的数据:' + id
 })
 
 module.exports = userRouter

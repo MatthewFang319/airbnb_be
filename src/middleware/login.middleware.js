@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const {
-  NAME_OR_PASSWORD_IS_REQUIRED, NAME_IS_NOT_EXISTS, PASSWORD_IS_INCORRENT,
+  NAME_OR_PASSWORD_IS_REQUIRED,
+  NAME_IS_NOT_EXISTS,
+  PASSWORD_IS_INCORRENT,
   UNAUTHORIZATION
 } = require('../config/error')
 const { PUBLIC_KEY } = require('../config/secrect')
@@ -9,7 +11,7 @@ const md5password = require('../utils/md5-password')
 
 const verifyLogin = async (ctx, next) => {
   const { username, password } = ctx.request.body
-    
+
   // 1.判断用户名和密码是否为空
   if (!username || !password) {
     return ctx.app.emit('error', NAME_OR_PASSWORD_IS_REQUIRED, ctx)
@@ -19,6 +21,7 @@ const verifyLogin = async (ctx, next) => {
   const users = await userService.findUserByName(username)
   const user = users[0]
   if (!user) {
+    console.log('失败')
     return ctx.app.emit('error', NAME_IS_NOT_EXISTS, ctx)
   }
 
@@ -26,7 +29,7 @@ const verifyLogin = async (ctx, next) => {
   if (user.password !== md5password(password)) {
     return ctx.app.emit('error', PASSWORD_IS_INCORRENT, ctx)
   }
-  
+
   // 4.将user对象保存在ctx
   ctx.user = user
 
@@ -48,13 +51,13 @@ const verifyAuth = async (ctx, next) => {
     const result = jwt.verify(token, PUBLIC_KEY, {
       algorithms: ['RS256']
     })
-    
+
     // 2.将token的信息保留下来
     ctx.user = result
 
     // 3.执行下一个中间件
     await next()
-  } catch(error) {
+  } catch (error) {
     ctx.app.emit('error', UNAUTHORIZATION, ctx)
   }
 }
