@@ -24,23 +24,32 @@ class UserController {
     const { userId } = ctx.params
     // 2.获取用户信息
     const userInfo = await userService.getUserInfo(userId)
-
     // 3.返回用户信息
     const data = {
-      userId: userInfo.id
+      userId: userInfo.id,
+      username: userInfo.username,
+      identity: userInfo.identity,
+      profile: userInfo.profile,
+      avatarUrl: userInfo.avatar_url
     }
     ctx.body = {
       code: 200,
+      msg: '获取成功',
       data
     }
   }
 
-  async updateUserInfo(ctx) {
+  async updateInfo(ctx) {
     // 1.获取用户id
-    const { userId } = ctx.params
+    const userInfo = ctx.request.body
     // 2.获取用户信息
-    console.log(userId)
+    const result = await userService.updateUserInfo(userInfo)
+    console.log(result)
     // 3.返回用户信息
+    ctx.body = {
+      code: 200,
+      msg: '修改成功'
+    }
   }
 
   async showAvatarImage(ctx) {
@@ -56,4 +65,5 @@ class UserController {
     ctx.body = fs.createReadStream(`${UPLOAD_PATH}/${filename}`)
   }
 }
+
 module.exports = new UserController()
