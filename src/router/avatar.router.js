@@ -11,6 +11,6 @@ const {
 avatarRouter.post('/', verifyAuth, handleAvatar, uploadAvatar)
 
 // 查看头像
-avatarRouter.get('/:filename', showAvatarImage)
+avatarRouter.get('/:id', showAvatarImage)
 
 module.exports = avatarRouter

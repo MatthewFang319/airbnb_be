@@ -3,10 +3,8 @@ const connection = require('../app/database')
 class UserService {
   async create(user) {
     const { username, password, identity } = user
-
     const statement =
       'INSERT INTO `user` (username, password, identity) VALUES (?, ?, ?);'
-
     const [result] = await connection.execute(statement, [
       username,
       password,
@@ -27,15 +25,24 @@ class UserService {
     return result[0]
   }
 
-  async updateUserInfo(userInfo) {
-    console.log(userInfo)
+  async updateUserInfo(userInfo, userId) {
+    const { profile, pet, career, school, skill } = userInfo
     const statement =
-      'UPDATE user SET avatar_url = ?, profile = ? WHERE id = ?;'
+      'UPDATE user SET profile = ?, pet = ?, career = ?, school = ?, skill = ? WHERE id = ?;'
     const [result] = await connection.execute(statement, [
-      userInfo.avatarUrl,
-      userInfo.profile,
-      userInfo.userId
+      profile,
+      pet,
+      career,
+      school,
+      skill,
+      userId
     ])
+    return result
+  }
+
+  async updateUserAvatar(avatarUrl, userId) {
+    const statement = `UPDATE user SET avatar_url = ? WHERE id = ?;`
+    const [result] = await connection.execute(statement, [avatarUrl, userId])
     return result
   }
 }

@@ -1,9 +1,7 @@
-const fs = require('fs')
-const fileService = require('../service/file.service')
 const userService = require('../service/user.service')
-const { UPLOAD_PATH } = require('../config/path')
 
 class UserController {
+  // 注册
   async create(ctx) {
     const user = ctx.request.body
     const result = await userService.create(user)
@@ -19,6 +17,7 @@ class UserController {
     }
   }
 
+  // 获取用户信息
   async getInfo(ctx) {
     // 1.获取用户id
     const { userId } = ctx.params
@@ -28,9 +27,13 @@ class UserController {
     const data = {
       userId: userInfo.id,
       username: userInfo.username,
+      avatarUrl: userInfo.avatar_url,
       identity: userInfo.identity,
-      profile: userInfo.profile,
-      avatarUrl: userInfo.avatar_url
+      school: userInfo.school,
+      career: userInfo.career,
+      pet: userInfo.pet,
+      skill: userInfo.skill,
+      profile: userInfo.profile
     }
     ctx.body = {
       code: 200,
@@ -38,31 +41,18 @@ class UserController {
       data
     }
   }
-
+  // 修改用户信息
   async updateInfo(ctx) {
     // 1.获取用户id
     const userInfo = ctx.request.body
+    const { id } = ctx.user
     // 2.获取用户信息
-    const result = await userService.updateUserInfo(userInfo)
-    console.log(result)
+    await userService.updateUserInfo(userInfo, id)
     // 3.返回用户信息
     ctx.body = {
       code: 200,
       msg: '修改成功'
     }
-  }
-
-  async showAvatarImage(ctx) {
-    // 1.获取用户id
-    const { userId } = ctx.params
-
-    // 2.获取userId对应头像信息
-    const avatarInfo = await fileService.queryAvatarWithUserId(userId)
-
-    // 3.读取头像所在的文件
-    const { filename, mimetype } = avatarInfo
-    ctx.type = mimetype
-    ctx.body = fs.createReadStream(`${UPLOAD_PATH}/${filename}`)
   }
 }
 
