@@ -51,10 +51,8 @@ const verifyAuth = async (ctx, next) => {
     const result = jwt.verify(token, PUBLIC_KEY, {
       algorithms: ['RS256']
     })
-
     // 2.将token的信息保留下来
     ctx.user = result
-
     // 3.执行下一个中间件
     await next()
   } catch (error) {
