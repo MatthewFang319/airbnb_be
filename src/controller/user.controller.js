@@ -41,6 +41,7 @@ class UserController {
       data
     }
   }
+
   // 修改用户信息
   async updateInfo(ctx) {
     // 1.获取用户id
