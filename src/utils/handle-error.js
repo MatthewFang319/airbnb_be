@@ -7,6 +7,12 @@ const {
   PASSWORD_IS_INCORRENT,
   UNAUTHORIZATION,
   OPERATION_IS_NOT_ALLOWED,
+  USER_IS_NOT_EXISTS,
+  HOME_IS_NOT_EXISTS,
+  COLLECTION_IS_NOT_EXISTS,
+  HOUSETYPE_IS_NOT_EXISTS,
+  LABLE_IS_NOT_EXISTS,
+  REVIEW_IS_NOT_EXISTS,
   INVALID_FILE_TYPE
 } = require('../config/error')
 
@@ -42,6 +48,30 @@ app.on('error', (error, ctx) => {
     case OPERATION_IS_NOT_ALLOWED:
       code = -2001
       msg = '没有操作该资源的权限'
+      break
+    case USER_IS_NOT_EXISTS:
+      code = -3001
+      msg = '不存在该用户'
+      break
+    case HOME_IS_NOT_EXISTS:
+      code = -3002
+      msg = '不存在该房源'
+      break
+    case COLLECTION_IS_NOT_EXISTS:
+      code = -3003
+      msg = '不存在该心愿单'
+      break
+    case HOUSETYPE_IS_NOT_EXISTS:
+      code = -3004
+      msg = '不存在该房型'
+      break
+    case LABLE_IS_NOT_EXISTS:
+      code = -3005
+      msg = '不存在该标签'
+      break
+    case REVIEW_IS_NOT_EXISTS:
+      code = -3006
+      msg = '不存在该评价'
       break
     case INVALID_FILE_TYPE:
       code = -2002
