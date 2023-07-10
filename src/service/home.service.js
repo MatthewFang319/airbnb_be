@@ -15,6 +15,25 @@ class HomeService {
     ])
     return result
   }
+
+  async patch(id, params, data) {
+    const statement = `UPDATE home SET ${params} = ? WHERE id = ?`
+    const [result] = await connection.execute(statement, [data, id])
+    return result
+  }
+  async addPicture(id, picture) {
+    const statement =
+      'INSERT INTO `home_picture` (home_id,picture_url) VALUES (?, ?);'
+    const [result] = await connection.execute(statement, [id, picture])
+    return result
+  }
+
+  async addLabel(home_id, label_id) {
+    const statement =
+      'INSERT INTO `home_label` (home_id,label_id) VALUES (?, ?);'
+    const [result] = await connection.execute(statement, [home_id, label_id])
+    return result
+  }
 }
 
 module.exports = new HomeService()

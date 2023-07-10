@@ -15,7 +15,12 @@ const {
   HOUSETYPE_IS_NOT_EXISTS,
   LABLE_IS_NOT_EXISTS,
   REVIEW_IS_NOT_EXISTS,
-  REMARK_IS_NOT_EXISTS
+  REMARK_IS_NOT_EXISTS,
+  TITLE_LENGTH_EXCEEDS,
+  MISSING_REQUIRED_PARAMS,
+  HOME_PICTURE_ERROR,
+  HOME_PICTURE_EMPTY,
+  HOME_LABEL_EMPTY
 } = require('../config/error')
 
 app.on('error', (error, ctx) => {
@@ -65,15 +70,15 @@ app.on('error', (error, ctx) => {
       break
     case HOUSETYPE_IS_NOT_EXISTS:
       code = -3004
-      msg = '不存在该房型'
+      msg = '传入了不存在的房型'
       break
     case LABLE_IS_NOT_EXISTS:
       code = -3005
-      msg = '不存在该标签'
+      msg = '传入了不存在的标签'
       break
     case REVIEW_IS_NOT_EXISTS:
       code = -3006
-      msg = '不存在该评价'
+      msg = '传入了不存在的评价'
       break
     case REMARK_IS_NOT_EXISTS:
       code = -3007
@@ -83,9 +88,30 @@ app.on('error', (error, ctx) => {
       code = -2002
       msg = '存在错误的文件类型'
       break
+    case TITLE_LENGTH_EXCEEDS:
+      code = 400
+      msg = '标题长度不得超过20'
+      break
     case DATA_INSERTION_FAILED:
       code = 400
-      msg = '插入数据失败，请检查参数'
+      msg = '插入数据失败，请检查参数的格式'
+      break
+    case HOME_PICTURE_EMPTY:
+      code = 400
+      msg = '图片不能为空'
+      break
+    case HOME_LABEL_EMPTY:
+      code = 400
+      msg = '标签为空'
+      break
+    case MISSING_REQUIRED_PARAMS:
+      code = 400
+      msg = '缺失必传参数'
+      break
+    case HOME_PICTURE_ERROR:
+      code = 400
+      msg = '传入图片格式有误'
+      break
   }
 
   ctx.body = { code, msg }

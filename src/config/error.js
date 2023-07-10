@@ -15,7 +15,17 @@ const REMARK_IS_NOT_EXISTS = 'remark_is_not_exists'
 const INVALID_FILE_TYPE = 'invalid_file_type'
 const FILE_SIZE_IS_TOO_LARGE = 'file_size_is_too_large'
 const DATA_INSERTION_FAILED = 'data_insertion_failed'
+const TITLE_LENGTH_EXCEEDS = 'title_length_exceeds'
+const MISSING_REQUIRED_PARAMS = 'missing_required_params'
+const HOME_PICTURE_ERROR = 'home_picture_error'
+const HOME_PICTURE_EMPTY = 'home_picture_empty'
+const HOME_LABEL_EMPTY = 'home_label_empty'
 module.exports = {
+  HOME_PICTURE_EMPTY,
+  HOME_LABEL_EMPTY,
+  HOME_PICTURE_ERROR,
+  MISSING_REQUIRED_PARAMS,
+  TITLE_LENGTH_EXCEEDS,
   INVALID_REQUEST_BODY,
   NAME_OR_PASSWORD_IS_REQUIRED,
   NAME_IS_ALREADY_EXISTS,
