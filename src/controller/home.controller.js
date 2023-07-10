@@ -31,7 +31,7 @@ class HomeController {
         code: 200,
         msg: '创建房源成功',
         data: {
-          home_id: homeId
+          homeId: homeId
         }
       }
     } catch (error) {
@@ -44,6 +44,32 @@ class HomeController {
       return ctx.app.emit('error', DATA_INSERTION_FAILED, ctx)
     }
     // console.log(result)
+  }
+
+  async update(ctx) {
+    console.log(ctx.request.body)
+    const content = ctx.request.body
+    const homeId = ctx.params['homeId']
+    // const { id } = ctx.user
+
+    for (let key in content) {
+      try {
+        console.log(key)
+        if (key === 'pictures' || key === 'labels') {
+          console.log('特别的')
+          return
+        }
+        await homeService.patch(homeId, key, content[key])
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    ctx.body = {
+      code: 200,
+      msg: '修改成功',
+      data: null
+    }
   }
 }
 
