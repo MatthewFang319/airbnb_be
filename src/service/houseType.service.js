@@ -1,11 +1,11 @@
 const connection = require('../app/database')
 
-class RegionService {
+class HouseTypeService {
   async getList() {
-    const statement = 'SELECT * FROM `region`;'
+    const statement = 'SELECT * FROM `house_type`;'
     const [result] = await connection.execute(statement)
     return result
   }
 }
 
-module.exports = new RegionService()
+module.exports = new HouseTypeService()

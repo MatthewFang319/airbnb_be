@@ -1,3 +1,4 @@
+const { DATA_INSERTION_FAILED } = require('../config/error')
 const homeService = require('../service/home.service')
 
 class HomeController {
@@ -9,7 +10,8 @@ class HomeController {
     try {
       await homeService.create(content, id)
     } catch (error) {
-      return ctx.app.emit('error')
+      console.log(error)
+      return ctx.app.emit('error', DATA_INSERTION_FAILED)
     }
     // console.log(result)
 
