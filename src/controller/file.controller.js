@@ -18,7 +18,7 @@ class FileController {
       if (item.mimetype.split('/')[0] != 'image') wrongType++
     })
     if (wrongType) {
-      ctx.app.emit('error', INVALID_FILE_TYPE, ctx)
+      return ctx.app.emit('error', INVALID_FILE_TYPE, ctx)
     } else if (overflow) {
       ctx.body = {
         code: -2009,

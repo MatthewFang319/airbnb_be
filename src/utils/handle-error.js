@@ -14,7 +14,8 @@ const {
   COLLECTION_IS_NOT_EXISTS,
   HOUSETYPE_IS_NOT_EXISTS,
   LABLE_IS_NOT_EXISTS,
-  REVIEW_IS_NOT_EXISTS
+  REVIEW_IS_NOT_EXISTS,
+  REMARK_IS_NOT_EXISTS
 } = require('../config/error')
 
 app.on('error', (error, ctx) => {
@@ -73,6 +74,10 @@ app.on('error', (error, ctx) => {
     case REVIEW_IS_NOT_EXISTS:
       code = -3006
       msg = '不存在该评价'
+      break
+    case REMARK_IS_NOT_EXISTS:
+      code = -3007
+      msg = '不存在该备注'
       break
     case INVALID_FILE_TYPE:
       code = -2002

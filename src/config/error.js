@@ -11,6 +11,7 @@ const COLLECTION_IS_NOT_EXISTS = 'collection_is_not_exists'
 const HOUSETYPE_IS_NOT_EXISTS = 'houseType_is_not_exists'
 const LABLE_IS_NOT_EXISTS = 'label_is_not_exists'
 const REVIEW_IS_NOT_EXISTS = 'review_is_not_exists'
+const REMARK_IS_NOT_EXISTS = 'remark_is_not_exists'
 const INVALID_FILE_TYPE = 'invalid_file_type'
 const FILE_SIZE_IS_TOO_LARGE = 'file_size_is_too_large'
 const DATA_INSERTION_FAILED = 'data_insertion_failed'
@@ -28,6 +29,7 @@ module.exports = {
   HOUSETYPE_IS_NOT_EXISTS,
   LABLE_IS_NOT_EXISTS,
   REVIEW_IS_NOT_EXISTS,
+  REMARK_IS_NOT_EXISTS,
   INVALID_FILE_TYPE,
   FILE_SIZE_IS_TOO_LARGE,
   DATA_INSERTION_FAILED

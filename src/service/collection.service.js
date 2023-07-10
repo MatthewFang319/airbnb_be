@@ -5,17 +5,27 @@ class CollectionService {
     const [result] = await connection.execute(statement, [name, userId])
     return result
   }
+
+  async update(name, collectionId) {
+    const statement = 'UPDATE `collection` SET `name` = ? WHERE id = ?;'
+    const [result] = await connection.execute(statement, [name, collectionId])
+    return result
+  }
+
   async delete(collectionId) {
     const statement = 'DELETE FROM `collection` WHERE id = ?;'
     const [result] = await connection.execute(statement, [collectionId])
     return result
   }
+
+  // 判断心愿单中是否有对应房源
   async hasHome(collectionId, homeId) {
     const statement =
       'SELECT * FROM home_collection WHERE collection_id = ? AND home_id = ?'
     const [result] = await connection.execute(statement, [collectionId, homeId])
-    return result
+    return result[0]
   }
+
   // 收藏房源
   async collectHome(collectionId, homeId) {
     const statement =
@@ -24,26 +34,55 @@ class CollectionService {
     return result
   }
 
+  // 取消收藏房源
+  async uncollectHome(collectionId, homeId) {
+    const statement =
+      'DELETE FROM `home_collection` WHERE collection_id = ? AND home_id = ?;'
+    const [result] = await connection.execute(statement, [collectionId, homeId])
+    return result
+  }
+
   // 根据id获取心愿单
   async getCollectionById(id) {
     const statement = `SELECT * FROM collection WHERE id = ?`
     const [result] = await connection.execute(statement, [id])
-    return result
+    return result[0]
+  }
+
+  // 获取心愿单详情
+  async getCollectionDetail(id) {
+    const statement = `SELECT 
+        collection.id,
+        collection.name,
+        JSON_ARRAYAGG(JSON_OBJECT('id', home.id, 'title', home.title, 'star', home.star, 'remark', JSON_OBJECT('id',remark.id,'content',remark.content))) AS 'homes'
+    FROM 
+        collection
+    LEFT JOIN 
+        home_collection AS hc ON collection.id = hc.collection_id
+    LEFT JOIN 
+        home ON hc.home_id = home.id
+    LEFT JOIN 
+        remark ON hc.collection_id = remark.collection_id AND hc.home_id = remark.home_id
+    WHERE 
+        collection.id = ?
+    GROUP BY 
+        collection.id`
+    const [result] = await connection.execute(statement, [id])
+    return result[0]
   }
 
   // 获取用户的心愿单列表
   async getList(userId) {
     const statement = `SELECT 
-        collection.id AS collection_id,
-        collection.user_id,
-        GROUP_CONCAT(home.id) AS home_ids,
-        GROUP_CONCAT(home.other_info) AS home_infos
+        collection.id,
+        collection.name,
+        JSON_ARRAYAGG(JSON_OBJECT('id', home.id, 'title', home.title)) AS 'homes'
     FROM 
         collection
-    INNER JOIN 
-        home_collection ON collection.id = home_collection.collection_id
-    INNER JOIN 
-        home ON home_collection.home_id = home.id
+    LEFT JOIN 
+        home_collection AS hc ON collection.id = hc.collection_id
+    LEFT JOIN 
+        home ON hc.home_id = home.id
     WHERE 
         collection.user_id = ?
     GROUP BY 
