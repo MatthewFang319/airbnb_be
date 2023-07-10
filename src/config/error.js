@@ -7,6 +7,7 @@ const UNAUTHORIZATION = 'unauthorization'
 const OPERATION_IS_NOT_ALLOWED = 'operation_is_not_allowed'
 const INVALID_FILE_TYPE = 'invalid_file_type'
 const FILE_SIZE_IS_TOO_LARGE = 'file_size_is_too_large'
+const DATA_INSERTION_FAILED = 'data_insertion_failed'
 module.exports = {
   INVALID_REQUEST_BODY,
   NAME_OR_PASSWORD_IS_REQUIRED,
@@ -16,5 +17,6 @@ module.exports = {
   UNAUTHORIZATION,
   OPERATION_IS_NOT_ALLOWED,
   INVALID_FILE_TYPE,
-  FILE_SIZE_IS_TOO_LARGE
+  FILE_SIZE_IS_TOO_LARGE,
+  DATA_INSERTION_FAILED
 }

@@ -7,7 +7,8 @@ const {
   PASSWORD_IS_INCORRENT,
   UNAUTHORIZATION,
   OPERATION_IS_NOT_ALLOWED,
-  INVALID_FILE_TYPE
+  INVALID_FILE_TYPE,
+  DATA_INSERTION_FAILED
 } = require('../config/error')
 
 app.on('error', (error, ctx) => {
@@ -47,6 +48,9 @@ app.on('error', (error, ctx) => {
       code = -2002
       msg = '存在错误的文件类型'
       break
+    case DATA_INSERTION_FAILED:
+      code = 400
+      msg = '插入数据失败，请检查参数'
   }
 
   ctx.body = { code, msg }

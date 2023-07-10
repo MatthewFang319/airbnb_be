@@ -1,6 +1,7 @@
 const {
   NAME_OR_PASSWORD_IS_REQUIRED,
-  NAME_IS_ALREADY_EXISTS
+  NAME_IS_ALREADY_EXISTS,
+  OPERATION_IS_NOT_ALLOWED
 } = require('../config/error')
 const userService = require('../service/user.service')
 const md5password = require('../utils/md5-password')
@@ -27,7 +28,17 @@ const handlePassword = async (ctx, next) => {
   await next()
 }
 
+// 判断是否为管理员
+const verifyAdmin = async (ctx, next) => {
+  const { identity } = ctx.user
+  if (identity !== 2) {
+    return ctx.app.emit('error', OPERATION_IS_NOT_ALLOWED, ctx)
+  }
+
+  await next()
+}
 module.exports = {
   verifyUser,
-  handlePassword
+  handlePassword,
+  verifyAdmin
 }

@@ -56,6 +56,7 @@ const verifyAuth = async (ctx, next) => {
     // 3.执行下一个中间件
     await next()
   } catch (error) {
+    console.log(error)
     ctx.app.emit('error', UNAUTHORIZATION, ctx)
   }
 }
