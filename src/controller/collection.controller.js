@@ -95,14 +95,11 @@ class CollectionController {
   async getCollection(ctx) {
     const { collectionId } = ctx.params
     const result = await collectionService.getCollectionDetail(collectionId)
-    if (result.homes[0].id == null) {
-      result.homes = []
-    }
-    result.homes.map(innerItem => {
-      if (innerItem.remark.id == null) {
-        innerItem.remark = null
-      }
-    })
+    // result.homes.map(innerItem => {
+    //   if (innerItem.remark.id == null) {
+    //     innerItem.remark = null
+    //   }
+    // })
     ctx.body = {
       code: 200,
       msg: '获取成功',
@@ -115,16 +112,13 @@ class CollectionController {
     const { id } = ctx.user
     const result = await collectionService.getList(id)
 
-    result.map(item => {
-      if (item.homes[0].id == null) {
-        item.homes = []
-      }
-      item.homes.map(innerItem => {
-        if (innerItem.remark.id == null) {
-          innerItem.remark = null
-        }
-      })
-    })
+    // result.map(item => {
+    //   item.homes.map(innerItem => {
+    //     if (innerItem.remark.id == null) {
+    //       innerItem.remark = null
+    //     }
+    //   })
+    // })
 
     ctx.body = {
       code: 200,
