@@ -20,7 +20,9 @@ const MISSING_REQUIRED_PARAMS = 'missing_required_params'
 const HOME_PICTURE_ERROR = 'home_picture_error'
 const HOME_PICTURE_EMPTY = 'home_picture_empty'
 const HOME_LABEL_EMPTY = 'home_label_empty'
+const UNKNOW_ERROR = 'unknow_error'
 module.exports = {
+  UNKNOW_ERROR,
   HOME_PICTURE_EMPTY,
   HOME_LABEL_EMPTY,
   HOME_PICTURE_ERROR,

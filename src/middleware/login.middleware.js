@@ -61,7 +61,27 @@ const verifyAuth = async (ctx, next) => {
   }
 }
 
+// 仅获取token信息，没有也通过
+const getTokenUser = async (ctx, next) => {
+  const authorization = ctx.headers.authorization
+  if (!authorization) {
+    ctx.user = { id: 0 }
+    await next()
+  }
+  // 1.获取token中信息
+  else {
+    const token = authorization.replace('Bearer ', '')
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ['RS256']
+    })
+    // 2.将token的信息保留下来
+    ctx.user = result
+    // 3.执行下一个中间件
+    await next()
+  }
+}
 module.exports = {
   verifyLogin,
-  verifyAuth
+  verifyAuth,
+  getTokenUser
 }
