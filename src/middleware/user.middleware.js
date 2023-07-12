@@ -1,9 +1,22 @@
 const {
   NAME_OR_PASSWORD_IS_REQUIRED,
   NAME_IS_ALREADY_EXISTS,
-  OPERATION_IS_NOT_ALLOWED
+  OPERATION_IS_NOT_ALLOWED,
+  PROFILE_LENGTH_EXCEEDS,
+  PET_LENGTH_EXCEEDS,
+  CAREER_LENGTH_EXCEEDS,
+  SCHOOL_LENGTH_EXCEEDS,
+  SKILL_LENGTH_EXCEEDS
 } = require('../config/error')
+const {
+  USER_PROFILE_LENGTH,
+  USER_SKILL_LENGTH,
+  USER_SCHOOL_LENGTH,
+  USER_CAREER_LENGTH,
+  USER_PET_LENGTH
+} = require('../constant/user')
 const userService = require('../service/user.service')
+const { checkLength } = require('../utils/check-data')
 const md5password = require('../utils/md5-password')
 
 const verifyUser = async (ctx, next) => {
@@ -34,11 +47,28 @@ const verifyAdmin = async (ctx, next) => {
   if (identity !== 2) {
     return ctx.app.emit('error', OPERATION_IS_NOT_ALLOWED, ctx)
   }
-
   await next()
 }
+
+// 判断输入参数字符串长度是否过长
+const checkParams = async (ctx, next) => {
+  const { profile, pet, career, school, skill } = ctx.request.body
+  if (profile && !checkLength(USER_PROFILE_LENGTH, profile))
+    return ctx.app.emit('error', PROFILE_LENGTH_EXCEEDS, ctx)
+  if (pet && !checkLength(USER_PET_LENGTH, pet))
+    return ctx.app.emit('error', PET_LENGTH_EXCEEDS, ctx)
+  if (career && !checkLength(USER_CAREER_LENGTH, career))
+    return ctx.app.emit('error', CAREER_LENGTH_EXCEEDS, ctx)
+  if (school && !checkLength(USER_SCHOOL_LENGTH, school))
+    return ctx.app.emit('error', SCHOOL_LENGTH_EXCEEDS, ctx)
+  if (skill && !checkLength(USER_SKILL_LENGTH, skill))
+    return ctx.app.emit('error', SKILL_LENGTH_EXCEEDS, ctx)
+  await next()
+}
+
 module.exports = {
   verifyUser,
   handlePassword,
-  verifyAdmin
+  verifyAdmin,
+  checkParams
 }

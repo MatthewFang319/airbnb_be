@@ -1,3 +1,4 @@
+const { NAME_IS_ALREADY_EXISTS } = require('../config/error')
 const userService = require('../service/user.service')
 
 class UserController {
@@ -44,15 +45,32 @@ class UserController {
 
   // 修改用户信息
   async updateInfo(ctx) {
-    // 1.获取用户id
     const userInfo = ctx.request.body
     const { id } = ctx.user
-    // 2.获取用户信息
-    await userService.updateUserInfo(userInfo, id)
-    // 3.返回用户信息
-    ctx.body = {
-      code: 200,
-      msg: '修改成功'
+    try {
+      await userService.updateUserInfo(userInfo, id)
+      ctx.body = {
+        code: 200,
+        msg: '修改成功'
+      }
+    } catch (err) {
+      ctx.body = {
+        code: -2000,
+        msg: '传入参数不合理'
+      }
+    }
+  }
+  // 检查用户名是否存在
+  async checkUsername(ctx) {
+    const { username } = ctx.request.body
+    const users = await userService.findUserByName(username)
+    if (users.length) {
+      return ctx.app.emit('error', NAME_IS_ALREADY_EXISTS, ctx)
+    } else {
+      ctx.body = {
+        code: 200,
+        msg: '该用户名不存在，可以注册'
+      }
     }
   }
 }

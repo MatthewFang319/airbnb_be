@@ -20,8 +20,22 @@ const {
   MISSING_REQUIRED_PARAMS,
   HOME_PICTURE_ERROR,
   HOME_PICTURE_EMPTY,
-  HOME_LABEL_EMPTY
+  HOME_LABEL_EMPTY,
+  AVATAR_LENGTH_EXCEEDS,
+  PET_LENGTH_EXCEEDS,
+  CAREER_LENGTH_EXCEEDS,
+  SCHOOL_LENGTH_EXCEEDS,
+  SKILL_LENGTH_EXCEEDS,
+  PROFILE_LENGTH_EXCEEDS
 } = require('../config/error')
+const {
+  USER_AVATAR_LENGTH,
+  USER_PROFILE_LENGTH,
+  USER_SKILL_LENGTH,
+  USER_SCHOOL_LENGTH,
+  USER_CAREER_LENGTH,
+  USER_PET_LENGTH
+} = require('../constant/user')
 
 app.on('error', (error, ctx) => {
   let code = 0
@@ -87,6 +101,30 @@ app.on('error', (error, ctx) => {
     case INVALID_FILE_TYPE:
       code = -2002
       msg = '存在错误的文件类型'
+      break
+    case AVATAR_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `avatarUrl参数长度不得超过${USER_AVATAR_LENGTH}`
+      break
+    case PET_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `pet参数长度不得超过${USER_PET_LENGTH}`
+      break
+    case CAREER_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `carrer参数长度不得超过${USER_CAREER_LENGTH}`
+      break
+    case SCHOOL_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `school参数长度不得超过${USER_SCHOOL_LENGTH}`
+      break
+    case SKILL_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `skill参数长度不得超过${USER_SKILL_LENGTH}`
+      break
+    case PROFILE_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `profile参数长度不得超过${USER_PROFILE_LENGTH}`
       break
     case TITLE_LENGTH_EXCEEDS:
       code = 400
