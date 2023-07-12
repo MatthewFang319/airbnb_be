@@ -50,6 +50,13 @@ class UserService {
     const [result] = await connection.execute(statement, [avatarUrl, userId])
     return result
   }
+
+  // 查看该用户是否为房东
+  async checkLandlord(userId) {
+    const statement = `SELECT user.identity identity FROM user WHERE id = ?`
+    const [result] = await connection.execute(statement, [userId])
+    return result
+  }
 }
 
 module.exports = new UserService()

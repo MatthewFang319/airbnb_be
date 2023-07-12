@@ -2,10 +2,13 @@ const {
   DATA_INSERTION_FAILED,
   LABLE_IS_NOT_EXISTS,
   INVALID_REQUEST_BODY,
-  HOME_IS_NOT_EXISTS
+  HOME_IS_NOT_EXISTS,
+  USER_NOT_ADMIN,
+  USER_IS_NOT_EXISTS
 } = require('../config/error')
 const collectionService = require('../service/collection.service')
 const homeService = require('../service/home.service')
+const { checkAdmin } = require('../utils/check-data')
 
 class HomeController {
   async create(ctx) {
@@ -119,6 +122,26 @@ class HomeController {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async getAdminHome(ctx) {
+    try {
+      const { userId } = ctx.params
+      const userIdentity = await checkAdmin(userId)
+      if (!userIdentity) {
+        return ctx.app.emit('error', USER_NOT_ADMIN, ctx)
+      }
+      const result = await homeService.queryUserHome(userId)
+
+      ctx.body = {
+        code: 200,
+        msg: '获取成功',
+        data: result
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', USER_IS_NOT_EXISTS, ctx)
     }
   }
 }

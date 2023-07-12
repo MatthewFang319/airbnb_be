@@ -21,7 +21,12 @@ const {
   HOME_PICTURE_ERROR,
   HOME_PICTURE_EMPTY,
   HOME_LABEL_EMPTY,
-  UNKNOW_ERROR
+  UNKNOW_ERROR,
+  USER_NOT_ADMIN,
+  TENANT_EXCEED,
+  ORDER_SELF,
+  START_GREATER_END,
+  ORDER_EXISTED
 } = require('../config/error')
 
 app.on('error', (error, ctx) => {
@@ -29,9 +34,21 @@ app.on('error', (error, ctx) => {
   let msg = ''
 
   switch (error) {
+    case ORDER_EXISTED:
+      code = 400
+      msg = '该时间段已被预约'
+      break
+    case START_GREATER_END:
+      code = 400
+      msg = '开始时间不得大于结束时间'
+      break
+    case ORDER_SELF:
+      code = 400
+      msg = '不可订阅本人房源'
+      break
     case UNKNOW_ERROR:
       code = 400
-      msg = '发生未知错误,请检查传参'
+      msg = '服务器内部错误'
       break
     case INVALID_REQUEST_BODY:
       code = -1000
@@ -116,6 +133,14 @@ app.on('error', (error, ctx) => {
     case HOME_PICTURE_ERROR:
       code = 400
       msg = '传入图片格式有误'
+      break
+    case USER_NOT_ADMIN:
+      code = 403
+      msg = '用户不是房东'
+      break
+    case TENANT_EXCEED:
+      code = 400
+      msg = '入住人数超出限定人数'
       break
   }
 

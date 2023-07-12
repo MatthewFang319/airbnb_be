@@ -7,7 +7,8 @@ const {
   update,
   detail,
   getType,
-  queryHome
+  queryHome,
+  getAdminHome
 } = require('../controller/home.controller')
 const {
   checkHomeData,
@@ -29,5 +30,6 @@ homeRouter.patch(
 homeRouter.get('/type', getType)
 
 homeRouter.get('/detail/:homeId', getTokenUser, detail)
+homeRouter.get('/landlord/:userId', getAdminHome)
 
 module.exports = homeRouter

@@ -6,6 +6,7 @@ const {
 } = require('../config/error')
 const { HOME_PARAMS, HOME_TITLE_LENGTH } = require('../constant/home')
 const homeService = require('../service/home.service')
+// const userService = require('../service/user.service')
 const { CheckIfMissing, checkLength } = require('../utils/check-data')
 
 const checkHomeData = async (ctx, next) => {
@@ -66,4 +67,5 @@ const updateLabel = async (ctx, next) => {
     return ctx.app.emit('error', HOME_PICTURE_ERROR, ctx)
   }
 }
+
 module.exports = { checkHomeData, updatePictures, updateLabel }

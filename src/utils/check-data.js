@@ -1,4 +1,7 @@
 // 检查字数
+
+const userService = require('../service/user.service')
+
 /**
  * 检查字符串长度是否符合要求
  * @param {number} length 字符串长度
@@ -20,7 +23,18 @@ const CheckIfMissing = (requiredParams, content) => {
 
   return missingParams <= 0
 }
+
+const checkAdmin = async userId => {
+  const [result] = await userService.checkLandlord(userId)
+  return result.identity > 1
+}
+
+const transferToSeconds = time => {
+  return new Date(time).getTime()
+}
 module.exports = {
+  checkAdmin,
   checkLength,
-  CheckIfMissing
+  CheckIfMissing,
+  transferToSeconds
 }

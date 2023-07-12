@@ -88,7 +88,7 @@ class HomeService {
     return result
   }
 
-  async quryHome(offset, limit, house_type) {
+  async quryHome(offset = 0, limit = 10, house_type) {
     const statement = `
     SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star,
     COUNT(r.id) reviewCount,
@@ -114,6 +114,21 @@ class HomeService {
           String(offset)
         ]))
     console.log(result)
+    return result
+  }
+
+  async queryUserHome(userId = 0) {
+    const statement = `
+    SELECT h.id id, h.title title, h.introduce introduce, h.star star,
+    CASE WHEN hp.home_id IS NULL THEN NULL
+        ELSE JSON_ARRAYAGG(hp.picture_url)
+    END pictures
+  FROM home h
+  LEFT JOIN home_picture hp ON h.id = hp.home_id
+  WHERE h.user_id = ?
+  GROUP BY h.id;
+    `
+    const [result] = await connection.execute(statement, [userId])
     return result
   }
 }

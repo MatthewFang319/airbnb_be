@@ -37,6 +37,7 @@ const verifyAdmin = async (ctx, next) => {
 
   await next()
 }
+
 module.exports = {
   verifyUser,
   handlePassword,

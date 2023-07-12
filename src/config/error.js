@@ -21,7 +21,17 @@ const HOME_PICTURE_ERROR = 'home_picture_error'
 const HOME_PICTURE_EMPTY = 'home_picture_empty'
 const HOME_LABEL_EMPTY = 'home_label_empty'
 const UNKNOW_ERROR = 'unknow_error'
+const USER_NOT_ADMIN = 'user_not_admin'
+const TENANT_EXCEED = 'tenant_exceed'
+const ORDER_SELF = 'order_self'
+const START_GREATER_END = 'start_greater_end'
+const ORDER_EXISTED = 'order_existed'
 module.exports = {
+  ORDER_EXISTED,
+  START_GREATER_END,
+  ORDER_SELF,
+  TENANT_EXCEED,
+  USER_NOT_ADMIN,
   UNKNOW_ERROR,
   HOME_PICTURE_EMPTY,
   HOME_LABEL_EMPTY,
