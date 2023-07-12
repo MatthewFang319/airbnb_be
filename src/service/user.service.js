@@ -31,17 +31,44 @@ class UserService {
   // 修改用户信息
   async updateUserInfo(userInfo, userId) {
     const { profile, pet, career, school, skill } = userInfo
-    const statement =
-      'UPDATE user SET profile = ?, pet = ?, career = ?, school = ?, skill = ? WHERE id = ?;'
-    const [result] = await connection.execute(statement, [
-      profile,
-      pet,
-      career,
-      school,
-      skill,
-      userId
-    ])
-    return result
+
+    let statement = 'UPDATE user SET '
+    let params = []
+    let count = 0
+
+    if (profile) {
+      statement += 'profile = ?, '
+      params.push(profile)
+      count++
+    }
+    if (pet) {
+      statement += 'pet = ?, '
+      params.push(pet)
+      count++
+    }
+    if (career) {
+      statement += 'career = ?, '
+      params.push(career)
+      count++
+    }
+    if (school) {
+      statement += 'school = ?, '
+      params.push(school)
+      count++
+    }
+    if (skill) {
+      statement += 'skill = ?, '
+      params.push(skill)
+      count++
+    }
+    statement = statement.slice(0, -2)
+    statement += ' WHERE id = ?'
+    params.push(userId)
+    if (count > 0) {
+      const [result] = await connection.execute(statement, params)
+      return result
+    }
+    throw new Error('传入参数不合理')
   }
 
   // 修改用户头像
