@@ -26,7 +26,8 @@ const {
   CAREER_LENGTH_EXCEEDS,
   SCHOOL_LENGTH_EXCEEDS,
   SKILL_LENGTH_EXCEEDS,
-  PROFILE_LENGTH_EXCEEDS
+  PROFILE_LENGTH_EXCEEDS,
+  UNKNOW_ERROR
 } = require('../config/error')
 const {
   USER_AVATAR_LENGTH,
@@ -42,6 +43,10 @@ app.on('error', (error, ctx) => {
   let msg = ''
 
   switch (error) {
+    case UNKNOW_ERROR:
+      code = 400
+      msg = '发生未知错误,请检查传参'
+      break
     case INVALID_REQUEST_BODY:
       code = -1000
       msg = '传入不合理参数'

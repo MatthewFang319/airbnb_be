@@ -112,6 +112,21 @@ class CollectionService {
     const [result] = await connection.execute(statement, [userId])
     return result
   }
+
+  // 根据homeid和userId查询用户是否收藏过
+  async judgeStarOrnot(userId, homeId) {
+    const statementHome = `SELECT * FROM home_collection WHERE home_id = ? `
+    const [homeResult] = await connection.execute(statementHome, [homeId])
+    if (homeResult.length === 0) return 0
+
+    const statementUser = `SELECT * FROM home WHERE id = ? AND user_id = ?`
+    const [userResult] = await connection.execute(statementUser, [
+      homeId,
+      userId
+    ])
+
+    return userResult.length > 0 ? 1 : 0
+  }
 }
 
 module.exports = new CollectionService()
