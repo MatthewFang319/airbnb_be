@@ -52,6 +52,13 @@ class HomeController {
     // console.log(result)
   }
 
+  async search(ctx) {
+    ctx.body = {
+      code: 200,
+      msg: '获取成功',
+      data: null
+    }
+  }
   async update(ctx) {
     const content = ctx.request.body
     const homeId = ctx.params['homeId']

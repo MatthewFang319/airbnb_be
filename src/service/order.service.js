@@ -23,7 +23,6 @@ class orderService {
     console.log(homeId, userId)
     const statement = 'SELECT * FROM home WHERE id = ? AND user_id = ?'
     const [result] = await connection.execute(statement, [homeId, userId])
-    console.log(result)
     return result.length > 0
   }
 
@@ -31,6 +30,13 @@ class orderService {
     const statement =
       'SELECT o.startTime startTime,o.endTime endTime FROM `order` o WHERE home_id = ?'
     const [result] = await connection.execute(statement, [homeId])
+    return result
+  }
+
+  async queryUserOrder(userId) {
+    const statement =
+      'SELECT o.id id, o.home_id homeId, o.startTime startTime, o.endTime endTime FROM `order` o WHERE user_id = ?'
+    const [result] = await connection.execute(statement, [userId])
     return result
   }
 }

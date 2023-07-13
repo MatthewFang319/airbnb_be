@@ -32,7 +32,8 @@ const {
   CAREER_LENGTH_EXCEEDS,
   SCHOOL_LENGTH_EXCEEDS,
   SKILL_LENGTH_EXCEEDS,
-  PROFILE_LENGTH_EXCEEDS
+  PROFILE_LENGTH_EXCEEDS,
+  UNVALID_DATE
 } = require('../config/error')
 const {
   USER_AVATAR_LENGTH,
@@ -48,6 +49,10 @@ app.on('error', (error, ctx) => {
   let msg = ''
 
   switch (error) {
+    case UNVALID_DATE:
+      code = 400
+      msg = '日期不符合格式'
+      break
     case ORDER_EXISTED:
       code = 400
       msg = '该时间段已被预约'

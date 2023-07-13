@@ -32,7 +32,9 @@ const TENANT_EXCEED = 'tenant_exceed'
 const ORDER_SELF = 'order_self'
 const START_GREATER_END = 'start_greater_end'
 const ORDER_EXISTED = 'order_existed'
+const UNVALID_DATE = 'unvalid_date'
 module.exports = {
+  UNVALID_DATE,
   ORDER_EXISTED,
   START_GREATER_END,
   ORDER_SELF,

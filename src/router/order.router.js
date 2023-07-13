@@ -1,5 +1,5 @@
 const KoaRouter = require('@koa/router')
-const { create } = require('../controller/order.controller')
+const { create, get, getUser } = require('../controller/order.controller')
 const { verifyAuth } = require('../middleware/login.middleware')
 const {
   checkTenant,
@@ -8,7 +8,9 @@ const {
 } = require('../middleware/order.middleware')
 
 const orderRouter = new KoaRouter({ prefix: '/order' })
+orderRouter.get('/user', verifyAuth, getUser)
 
+orderRouter.get('/:homeId', get)
 orderRouter.post(
   '/:homeId',
   verifyAuth,

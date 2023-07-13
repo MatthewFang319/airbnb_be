@@ -3,10 +3,11 @@ const {
   UNKNOW_ERROR,
   ORDER_SELF,
   START_GREATER_END,
-  ORDER_EXISTED
+  ORDER_EXISTED,
+  UNVALID_DATE
 } = require('../config/error')
 const orderService = require('../service/order.service')
-const { transferToSeconds } = require('../utils/check-data')
+const { formatDate, validateDate } = require('../utils/check-data')
 
 const checkTenant = async (ctx, next) => {
   const { homeId } = ctx.params
@@ -41,17 +42,23 @@ const checkDate = async (ctx, next) => {
   const { homeId } = ctx.params
   const orderedDate = await orderService.queryDate(homeId)
 
-  const currStart = new Date(content.startTime).getTime()
-  const currEnd = new Date(content.endTime).getTime()
+  if (!validateDate(content.startTime) || !validateDate(content.endTime)) {
+    return ctx.app.emit('error', UNVALID_DATE, ctx)
+  }
+
+  const currStart = new Date(content.startTime)
+  const currEnd = new Date(content.endTime)
 
   if (currStart > currEnd) return ctx.app.emit('error', START_GREATER_END, ctx)
 
+  console.log(currStart)
   // 检查用户的时间是否在任何订单的时间范围内
-  let overlaps = orderedDate.some(
-    order =>
-      currStart <= transferToSeconds(order.endTime) &&
-      currEnd >= transferToSeconds(order.startTime)
-  )
+  let overlaps = orderedDate.some(order => {
+    return (
+      currStart <= formatDate(order.endTime) &&
+      currEnd >= formatDate(order.startTime)
+    )
+  })
 
   if (overlaps) {
     return ctx.app.emit('error', ORDER_EXISTED, ctx)
