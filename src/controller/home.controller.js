@@ -4,7 +4,8 @@ const {
   INVALID_REQUEST_BODY,
   HOME_IS_NOT_EXISTS,
   USER_NOT_ADMIN,
-  USER_IS_NOT_EXISTS
+  USER_IS_NOT_EXISTS,
+  UNKNOW_ERROR
 } = require('../config/error')
 const collectionService = require('../service/collection.service')
 const homeService = require('../service/home.service')
@@ -53,10 +54,30 @@ class HomeController {
   }
 
   async search(ctx) {
-    ctx.body = {
-      code: 200,
-      msg: '获取成功',
-      data: null
+    const { id } = ctx.user
+    console.log(id)
+    try {
+      const { keyword, houseTypeId = undefined, offset, limit } = ctx.query
+      let result = await homeService.search(keyword, offset, limit, houseTypeId)
+
+      // 遍历每一个item检查是否有收藏
+      result = await Promise.all(
+        result.map(async item => {
+          const judge = await collectionService.judgeStarOrnot(id, item.id)
+          return {
+            ...item,
+            isCollected: judge
+          }
+        })
+      )
+      ctx.body = {
+        code: 200,
+        msg: '获取成功',
+        data: result.length > 0 ? result : null
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
   async update(ctx) {
@@ -118,10 +139,22 @@ class HomeController {
   }
 
   async queryHome(ctx) {
+    const { id } = ctx.user
     const { offset, limit, houseType_id } = ctx.query
     try {
-      const result = await homeService.quryHome(offset, limit, houseType_id)
-      console.log(offset, limit, houseType_id)
+      let result = await homeService.quryHome(offset, limit, houseType_id)
+
+      // 遍历每一个item检查是否有收藏
+      result = await Promise.all(
+        result.map(async item => {
+          const judge = await collectionService.judgeStarOrnot(id, item.id)
+          return {
+            ...item,
+            isCollected: judge
+          }
+        })
+      )
+
       ctx.body = {
         code: 200,
         msg: '获取成功',
@@ -129,6 +162,7 @@ class HomeController {
       }
     } catch (error) {
       console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
 

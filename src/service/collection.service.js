@@ -115,17 +115,14 @@ class CollectionService {
 
   // 根据homeid和userId查询用户是否收藏过
   async judgeStarOrnot(userId, homeId) {
-    const statementHome = `SELECT * FROM home_collection WHERE home_id = ? `
-    const [homeResult] = await connection.execute(statementHome, [homeId])
-    if (homeResult.length === 0) return 0
+    const statement = `SELECT hc.*
+    FROM home_collection hc
+    JOIN collection c on hc.collection_id = c.id
+    WHERE c.user_id = ? AND hc.home_id = ?; `
 
-    const statementUser = `SELECT * FROM home WHERE id = ? AND user_id = ?`
-    const [userResult] = await connection.execute(statementUser, [
-      homeId,
-      userId
-    ])
+    const [result] = await connection.execute(statement, [userId, homeId])
 
-    return userResult.length > 0 ? 1 : 0
+    return result.length > 0 ? 1 : 0
   }
 }
 

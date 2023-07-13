@@ -12,7 +12,7 @@ orderRouter.get('/user', verifyAuth, getUser)
 
 orderRouter.get('/:homeId', get)
 orderRouter.post(
-  '/:homeId',
+  '/',
   verifyAuth,
   checkOrderAuth,
   checkTenant,

@@ -8,11 +8,10 @@ class orderController {
     try {
       const content = ctx.request.body
       const { id } = ctx.user
-      const { homeId } = ctx.params
+      const { homeId } = content
       // console.log(content, id, homeId)
 
       const result = await orderService.add(homeId, id, content)
-      console.log(result)
       ctx.body = {
         code: 200,
         msg: '订单成功',

@@ -10,8 +10,8 @@ const orderService = require('../service/order.service')
 const { formatDate, validateDate } = require('../utils/check-data')
 
 const checkTenant = async (ctx, next) => {
-  const { homeId } = ctx.params
   const content = ctx.request.body
+  const { homeId } = content
   try {
     const result = await orderService.tenant(homeId)
     // 检测到入住人数小于等于0报错处理
@@ -28,7 +28,7 @@ const checkTenant = async (ctx, next) => {
 }
 
 const checkOrderAuth = async (ctx, next) => {
-  const { homeId } = ctx.params
+  const { homeId } = ctx.request.body
   const { id } = ctx.user
 
   const result = await orderService.orderSelf(homeId, id)
@@ -39,7 +39,7 @@ const checkOrderAuth = async (ctx, next) => {
 
 const checkDate = async (ctx, next) => {
   const content = ctx.request.body
-  const { homeId } = ctx.params
+  const { homeId } = content
   const orderedDate = await orderService.queryDate(homeId)
 
   if (!validateDate(content.startTime) || !validateDate(content.endTime)) {

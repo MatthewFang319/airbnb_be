@@ -8,7 +8,8 @@ const {
   detail,
   getType,
   queryHome,
-  getAdminHome
+  getAdminHome,
+  search
 } = require('../controller/home.controller')
 const {
   checkHomeData,
@@ -31,5 +32,5 @@ homeRouter.get('/type', getType)
 
 homeRouter.get('/detail/:homeId', getTokenUser, detail)
 homeRouter.get('/landlord/:userId', getAdminHome)
-
+homeRouter.get('/search', getTokenUser, search)
 module.exports = homeRouter

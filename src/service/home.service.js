@@ -36,7 +36,8 @@ class HomeService {
   LEFT JOIN user u ON u.id = h.user_id
   LEFT JOIN house_type ht ON h.houseType_id = ht.id
   LEFT JOIN home_picture hp ON h.id = hp.home_id
-  LEFT JOIN review r ON h.id = r.home_id 
+  LEFT JOIN \`order\` o ON h.id = o.home_id
+  LEFT JOIN review r ON o.id = r.order_id  
   WHERE h.id = ?
   GROUP BY h.id;`
 
@@ -44,6 +45,43 @@ class HomeService {
     return result
   }
 
+  async search(keyword, offset = 0, limit = 20, houseType_id) {
+    const statement = `SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star,
+    COUNT(r.id) reviewCount,
+    JSON_OBJECT('id', ht.id, 'name', ht.name) houseType,
+      CASE WHEN hp.home_id IS NULL THEN NULL
+    ELSE JSON_ARRAYAGG(hp.picture_url)
+  END pictures,
+    JSON_OBJECT('id', u.id, 'name', u.username, 'avatarURL', u.avatar_url) user
+  FROM home h
+  LEFT JOIN user u ON u.id = h.user_id
+  LEFT JOIN house_type ht ON h.houseType_id = ht.id
+  LEFT JOIN home_picture hp ON h.id = hp.home_id
+  LEFT JOIN \`order\` o ON h.id = o.home_id
+  LEFT JOIN review r ON o.id = r.order_id  
+  WHERE (title LIKE ? OR introduce LIKE ?) ${
+    houseType_id === undefined ? '' : 'AND houseType_id = ?'
+  }
+  GROUP BY h.id
+  LIMIT ? OFFSET ?
+  `
+    const [result] =
+      houseType_id === undefined
+        ? await connection.execute(statement, [
+            `%${keyword}%`,
+            `%${keyword}%`,
+            limit,
+            offset
+          ])
+        : await connection.execute(statement, [
+            `%${keyword}%`,
+            `%${keyword}%`,
+            houseType_id,
+            limit,
+            offset
+          ])
+    return result
+  }
   async patch(id, params, data) {
     const statement = `UPDATE home SET ${params} = ? WHERE id = ?`
     const [result] = await connection.execute(statement, [data, id])
@@ -101,7 +139,8 @@ class HomeService {
   LEFT JOIN user u ON u.id = h.user_id
   LEFT JOIN house_type ht ON h.houseType_id = ht.id
   LEFT JOIN home_picture hp ON h.id = hp.home_id
-  LEFT JOIN review r ON h.id = r.home_id
+  LEFT JOIN \`order\` o ON h.id = o.home_id
+  LEFT JOIN review r ON o.id = r.order_id  
   ${house_type === undefined ? '' : 'WHERE h.houseType_id=?'} 
   GROUP BY h.id
   LIMIT ? OFFSET ?;
