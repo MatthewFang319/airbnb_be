@@ -33,6 +33,5 @@ const verifyPermission = async (ctx, next) => {
   await next()
 }
 module.exports = {
-  // verifyMomentPermission
   verifyPermission
 }
