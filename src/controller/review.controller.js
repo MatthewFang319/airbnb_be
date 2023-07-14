@@ -38,6 +38,17 @@ class ReviewController {
       msg: '删除成功'
     }
   }
+
+  async getHomeReview(ctx) {
+    const { homeId } = ctx.params
+    const { size, offset } = ctx.query
+    const data = await reviewService.getHomeReview(homeId, size, offset)
+    ctx.body = {
+      code: 200,
+      msg: '查询成功',
+      data
+    }
+  }
 }
 
 module.exports = new ReviewController()
