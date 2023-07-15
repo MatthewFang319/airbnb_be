@@ -1,5 +1,8 @@
+const { REMARK_CONTENT_LENGTH_EXCEEDS } = require('../config/error')
+const { REMARK_CONTENT_LENGTH } = require('../constant/params-length')
 const collectionService = require('../service/collection.service')
 const remarkService = require('../service/remark.service')
+const { checkLength } = require('../utils/check-data')
 
 class RemarkController {
   // 备注房源
@@ -14,6 +17,8 @@ class RemarkController {
         msg: '心愿单中不存在该房源'
       }
     }
+    if (!checkLength(REMARK_CONTENT_LENGTH, remark))
+      return ctx.app.emit('error', REMARK_CONTENT_LENGTH_EXCEEDS, ctx)
     const result = await remarkService.create(collectionId, homeId, remark)
     ctx.body = {
       code: 200,
@@ -27,6 +32,8 @@ class RemarkController {
 
   async updateRemark(ctx) {
     const { remarkId, content } = ctx.request.body
+    if (!checkLength(REMARK_CONTENT_LENGTH, content))
+      return ctx.app.emit('error', REMARK_CONTENT_LENGTH_EXCEEDS, ctx)
     await remarkService.update(remarkId, content)
     ctx.body = {
       code: 200,

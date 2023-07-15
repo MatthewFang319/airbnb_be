@@ -60,7 +60,7 @@ class ReviewService {
 
   // 根据订单查询评价
   async getReviewByOrder(orderId, userId) {
-    const statement = `SELECT * FROM review WHERE order_id = ? AND user_id;`
+    const statement = `SELECT * FROM review WHERE order_id = ? AND user_id = ?;`
     const [result] = await connection.execute(statement, [orderId, userId])
     return result
   }

@@ -33,16 +33,27 @@ const {
   SCHOOL_LENGTH_EXCEEDS,
   SKILL_LENGTH_EXCEEDS,
   PROFILE_LENGTH_EXCEEDS,
-  UNVALID_DATE
+  UNVALID_DATE,
+  IDENTITY_IS_INVALID,
+  IDENTITY_IS_REQUIRED,
+  USERNAME_LENGTH_EXCEEDS,
+  COLLECTION_NAME_LENGTH_EXCEEDS,
+  REMARK_CONTENT_LENGTH,
+  REVIEW_CONTENT_LENGTH,
+  REVIEW_CONTENT_LENGTH_EXCEEDS,
+  REMARK_CONTENT_LENGTH_EXCEEDS
 } = require('../config/error')
+
 const {
   USER_AVATAR_LENGTH,
   USER_PROFILE_LENGTH,
   USER_SKILL_LENGTH,
   USER_SCHOOL_LENGTH,
   USER_CAREER_LENGTH,
-  USER_PET_LENGTH
-} = require('../constant/user')
+  USER_PET_LENGTH,
+  USERNAME_LENGTH,
+  COLLECTION_NAME_LENGTH
+} = require('../constant/params-length')
 
 app.on('error', (error, ctx) => {
   let code = 0
@@ -89,8 +100,16 @@ app.on('error', (error, ctx) => {
       code = -1004
       msg = '密码错误'
       break
-    case UNAUTHORIZATION:
+    case IDENTITY_IS_REQUIRED:
       code = -1005
+      msg = '用户身份不能为空'
+      break
+    case IDENTITY_IS_INVALID:
+      code = -1006
+      msg = '用户身份不合理，1为房客，2为房东'
+      break
+    case UNAUTHORIZATION:
+      code = -1007
       msg = '无效的token或者token已经过期'
       break
     case OPERATION_IS_NOT_ALLOWED:
@@ -129,6 +148,10 @@ app.on('error', (error, ctx) => {
       code = -2002
       msg = '存在错误的文件类型'
       break
+    case USERNAME_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `用户名长度不得超过${USERNAME_LENGTH}`
+      break
     case AVATAR_LENGTH_EXCEEDS:
       code = -2003
       msg = `avatarUrl参数长度不得超过${USER_AVATAR_LENGTH}`
@@ -152,6 +175,18 @@ app.on('error', (error, ctx) => {
     case PROFILE_LENGTH_EXCEEDS:
       code = -2003
       msg = `profile参数长度不得超过${USER_PROFILE_LENGTH}`
+      break
+    case COLLECTION_NAME_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `收藏夹名称长度不得超过${COLLECTION_NAME_LENGTH}`
+      break
+    case REMARK_CONTENT_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `备注内容长度不得超过${REMARK_CONTENT_LENGTH}`
+      break
+    case REVIEW_CONTENT_LENGTH_EXCEEDS:
+      code = -2003
+      msg = `评价内容长度不得超过${REVIEW_CONTENT_LENGTH}`
       break
     case TITLE_LENGTH_EXCEEDS:
       code = 400
