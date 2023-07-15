@@ -38,7 +38,6 @@ class ReviewService {
   async getHomeReview(homeId, size = 10, offset = 0) {
     const statement = `SELECT 
       r.id 'reviewId',
-      r.order_id 'orderId',
       JSON_OBJECT(
 			'userId', u.id,
 			'username', u.username,
@@ -56,6 +55,16 @@ class ReviewService {
     return result
   }
 
+  // 查询某个房源的所有评价个数
+  async getHomeReviewCount(homeId) {
+    const statement = `SELECT * FROM \`order\` o
+    INNER JOIN review r ON r.order_id = o.id
+    INNER JOIN user u ON u.id = r.user_id
+    WHERE home_id = ?`
+
+    const [result] = await connection.execute(statement, [homeId])
+    return result.length
+  }
   // 根据订单查询评价
   async getReviewByOrder(orderId, userId) {
     const statement = `SELECT * FROM review WHERE order_id = ? AND user_id = ?;`

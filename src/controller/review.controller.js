@@ -56,10 +56,17 @@ class ReviewController {
     const { homeId } = ctx.params
     const { limit, offset } = ctx.query
     const data = await reviewService.getHomeReview(homeId, limit, offset)
+    const count = await reviewService.getHomeReviewCount(homeId)
+    const hasMore = Number(data.length) + Number(offset) < count
     ctx.body = {
       code: 200,
       msg: '查询成功',
-      data
+      data: {
+        reviewList: data,
+        totalCount: count,
+        size: data.length,
+        hasMore: hasMore
+      }
     }
   }
 }

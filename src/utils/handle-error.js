@@ -84,7 +84,7 @@ app.on('error', (error, ctx) => {
       break
     case ORDER_SELF:
       code = 400
-      msg = '不可订阅本人房源'
+      msg = '不可订单本人房源'
       break
     case UNKNOW_ERROR:
       code = 400

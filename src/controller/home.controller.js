@@ -101,10 +101,20 @@ class HomeController {
           }
         })
       )
+      const count = await homeService.querySearchCount(keyword, houseTypeId)
+      console.log(count)
+      const hasMore = Number(result.length) + Number(offset) < Number(count)
+
+      // console.log(res);
       ctx.body = {
         code: 200,
         msg: '获取成功',
-        data: result.length > 0 ? result : null
+        data: {
+          homeList: result.length > 0 ? result : null,
+          totalCount: count,
+          size: result.length,
+          hasMore: hasMore
+        }
       }
     } catch (error) {
       console.log(error)
@@ -171,9 +181,9 @@ class HomeController {
 
   async queryHome(ctx) {
     const { id } = ctx.user
-    const { offset, limit, houseType_id } = ctx.query
+    const { offset, limit, houseTypeId } = ctx.query
     try {
-      let result = await homeService.quryHome(offset, limit, houseType_id)
+      let result = await homeService.quryHome(offset, limit, houseTypeId)
 
       // 遍历每一个item检查是否有收藏
       result = await Promise.all(
@@ -186,10 +196,19 @@ class HomeController {
         })
       )
 
+      const count = await homeService.quryHomeCount(houseTypeId)
+      const hasMore = Number(result.length) + Number(offset) < Number(count)
+
+      // console.log(res);
       ctx.body = {
         code: 200,
         msg: '获取成功',
-        data: result
+        data: {
+          homeList: result.length > 0 ? result : null,
+          totalCount: count,
+          size: result.length,
+          hasMore: hasMore
+        }
       }
     } catch (error) {
       console.log(error)
