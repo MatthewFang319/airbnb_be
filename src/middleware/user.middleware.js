@@ -6,24 +6,36 @@ const {
   PET_LENGTH_EXCEEDS,
   CAREER_LENGTH_EXCEEDS,
   SCHOOL_LENGTH_EXCEEDS,
-  SKILL_LENGTH_EXCEEDS
+  SKILL_LENGTH_EXCEEDS,
+  IDENTITY_IS_REQUIRED,
+  IDENTITY_IS_INVALID,
+  USERNAME_LENGTH_EXCEEDS
 } = require('../config/error')
 const {
   USER_PROFILE_LENGTH,
   USER_SKILL_LENGTH,
   USER_SCHOOL_LENGTH,
   USER_CAREER_LENGTH,
-  USER_PET_LENGTH
-} = require('../constant/user')
+  USER_PET_LENGTH,
+  USERNAME_LENGTH
+} = require('../constant/params-length')
 const userService = require('../service/user.service')
 const { checkLength } = require('../utils/check-data')
 const md5password = require('../utils/md5-password')
 
 const verifyUser = async (ctx, next) => {
   // 判断传入用户名或密码是否为空
-  const { username, password } = ctx.request.body
+  const { username, password, identity } = ctx.request.body
   if (!username || !password) {
     return ctx.app.emit('error', NAME_OR_PASSWORD_IS_REQUIRED, ctx)
+  }
+  if (!checkLength(USERNAME_LENGTH, username))
+    return ctx.app.emit('error', USERNAME_LENGTH_EXCEEDS, ctx)
+  if (identity == undefined) {
+    // 判断传入的用户身份是否为空或错误
+    return ctx.app.emit('error', IDENTITY_IS_REQUIRED, ctx)
+  } else if (identity != 1 && identity != 2) {
+    return ctx.app.emit('error', IDENTITY_IS_INVALID, ctx)
   }
   // 判断数据库中是否存在该用户名
   const users = await userService.findUserByName(username)

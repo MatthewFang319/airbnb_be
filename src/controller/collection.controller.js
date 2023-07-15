@@ -1,10 +1,17 @@
-const { HOME_IS_NOT_EXISTS } = require('../config/error')
+const {
+  HOME_IS_NOT_EXISTS,
+  COLLECTION_NAME_LENGTH_EXCEEDS
+} = require('../config/error')
+const { COLLECTION_NAME_LENGTH } = require('../constant/params-length')
 const collectionService = require('../service/collection.service')
+const { checkLength } = require('../utils/check-data')
 
 class CollectionController {
   async create(ctx) {
     const { name } = ctx.request.body
     const { id } = ctx.user
+    if (!checkLength(COLLECTION_NAME_LENGTH, name))
+      return ctx.app.emit('error', COLLECTION_NAME_LENGTH_EXCEEDS, ctx)
     await collectionService.create(name, id)
     ctx.body = {
       code: 200,
@@ -16,6 +23,9 @@ class CollectionController {
     const { name, collectionId } = ctx.request.body
     const { id } = ctx.user
     try {
+      if (!checkLength(COLLECTION_NAME_LENGTH, name))
+        return ctx.app.emit('error', COLLECTION_NAME_LENGTH_EXCEEDS, ctx)
+
       await collectionService.update(name, collectionId)
       const data = {
         id: collectionId,

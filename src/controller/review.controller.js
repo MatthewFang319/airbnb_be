@@ -1,5 +1,8 @@
 const { UNKNOW_ERROR } = require('../config/error')
+const { REVIEW_CONTENT_LENGTH_EXCEEDS } = require('../config/error')
+const { REVIEW_CONTENT_LENGTH } = require('../constant/params-length')
 const reviewService = require('../service/review.service')
+const { checkLength } = require('../utils/check-data')
 
 class ReviewController {
   async create(ctx) {
@@ -8,18 +11,19 @@ class ReviewController {
     const { id } = ctx.user
     try {
       const result = await reviewService.getReviewByOrder(orderId, id)
-      console.log(result, orderId, id)
       if (result.length > 0) {
-        return (ctx.body = {
+        ctx.body = {
           code: -2001,
           msg: '你已评价该订单'
-        })
+        }
       } else {
+        if (!checkLength(REVIEW_CONTENT_LENGTH, content))
+          return ctx.app.emit('error', REVIEW_CONTENT_LENGTH_EXCEEDS, ctx)
         await reviewService.create(orderId, content, star, id)
-        return (ctx.body = {
+        ctx.body = {
           code: 200,
           msg: '评价成功'
-        })
+        }
       }
     } catch (error) {
       console.log(error)
@@ -30,6 +34,8 @@ class ReviewController {
   async updateReview(ctx) {
     const { reviewId } = ctx.params
     const { content, star } = ctx.request.body
+    if (!checkLength(REVIEW_CONTENT_LENGTH, content))
+      return ctx.app.emit('error', REVIEW_CONTENT_LENGTH_EXCEEDS, ctx)
     await reviewService.update(reviewId, content, star)
     ctx.body = {
       code: 200,
