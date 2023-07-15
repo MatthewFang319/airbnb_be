@@ -48,24 +48,24 @@ const updatePictures = async (ctx, next) => {
   }
 }
 
-const updateLabel = async (ctx, next) => {
-  const content = ctx.request.body
-  const { homeId } = ctx.params
-  try {
-    if ('labels' in content) {
-      await homeService.deleteLabels(homeId)
-      Promise.all(
-        content.labels.map(item => {
-          return homeService.addLabel(homeId, item)
-        })
-      )
+// const updateLabel = async (ctx, next) => {
+//   const content = ctx.request.body
+//   const { homeId } = ctx.params
+//   try {
+//     if ('labels' in content) {
+//       await homeService.deleteLabels(homeId)
+//       Promise.all(
+//         content.labels.map(item => {
+//           return homeService.addLabel(homeId, item)
+//         })
+//       )
 
-      await next()
-    } else await next()
-  } catch (error) {
-    console.log(error)
-    return ctx.app.emit('error', HOME_PICTURE_ERROR, ctx)
-  }
-}
+//       await next()
+//     } else await next()
+//   } catch (error) {
+//     console.log(error)
+//     return ctx.app.emit('error', HOME_PICTURE_ERROR, ctx)
+//   }
+// }
 
-module.exports = { checkHomeData, updatePictures, updateLabel }
+module.exports = { checkHomeData, updatePictures }

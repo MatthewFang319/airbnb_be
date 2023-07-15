@@ -33,8 +33,12 @@ const ORDER_SELF = 'order_self'
 const START_GREATER_END = 'start_greater_end'
 const ORDER_EXISTED = 'order_existed'
 const UNVALID_DATE = 'unvalid_date'
+const LABEL_IS_EXISTED = 'label_id_existed'
+const ORDER_IS_NOT_EXISTED = 'order_is_not_existed'
 module.exports = {
+  ORDER_IS_NOT_EXISTED,
   UNVALID_DATE,
+  LABEL_IS_EXISTED,
   ORDER_EXISTED,
   START_GREATER_END,
   ORDER_SELF,

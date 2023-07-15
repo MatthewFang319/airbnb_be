@@ -113,9 +113,10 @@ class HomeService {
     return result
   }
 
-  async deleteLabels(home_id) {
-    const statement = ' DELETE FROM `home_label` WHERE home_id = ?;'
-    const [result] = await connection.execute(statement, [home_id])
+  async deleteLabels(home_id, label_id) {
+    const statement =
+      'DELETE FROM `home_label` WHERE home_id = ? AND label_id = ?;'
+    const [result] = await connection.execute(statement, [home_id, label_id])
     return result
   }
 

@@ -33,7 +33,9 @@ const {
   SCHOOL_LENGTH_EXCEEDS,
   SKILL_LENGTH_EXCEEDS,
   PROFILE_LENGTH_EXCEEDS,
-  UNVALID_DATE
+  UNVALID_DATE,
+  LABEL_IS_EXISTED,
+  ORDER_IS_NOT_EXISTED
 } = require('../config/error')
 const {
   USER_AVATAR_LENGTH,
@@ -49,6 +51,14 @@ app.on('error', (error, ctx) => {
   let msg = ''
 
   switch (error) {
+    case ORDER_IS_NOT_EXISTED:
+      code = 400
+      msg = '该订单不存在'
+      break
+    case LABEL_IS_EXISTED:
+      code = 400
+      msg = '该标签已存在'
+      break
     case UNVALID_DATE:
       code = 400
       msg = '日期不符合格式'
@@ -70,87 +80,87 @@ app.on('error', (error, ctx) => {
       msg = '服务器内部错误'
       break
     case INVALID_REQUEST_BODY:
-      code = -1000
+      code = 400
       msg = '传入不合理参数'
       break
     case NAME_OR_PASSWORD_IS_REQUIRED:
-      code = -1001
+      code = 400
       msg = '用户名或者密码不能为空'
       break
     case NAME_IS_ALREADY_EXISTS:
-      code = -1002
+      code = 400
       msg = '用户名已存在'
       break
     case NAME_IS_NOT_EXISTS:
-      code = -1003
+      code = 400
       msg = '用户名不存在'
       break
     case PASSWORD_IS_INCORRENT:
-      code = -1004
+      code = 400
       msg = '密码错误'
       break
     case UNAUTHORIZATION:
-      code = -1005
+      code = 401
       msg = '无效的token或者token已经过期'
       break
     case OPERATION_IS_NOT_ALLOWED:
-      code = -2001
+      code = 403
       msg = '没有操作该资源的权限'
       break
     case USER_IS_NOT_EXISTS:
-      code = -3001
+      code = 400
       msg = '不存在该用户'
       break
     case HOME_IS_NOT_EXISTS:
-      code = -3002
+      code = 400
       msg = '不存在该房源'
       break
     case COLLECTION_IS_NOT_EXISTS:
-      code = -3003
+      code = 400
       msg = '不存在该心愿单'
       break
     case HOUSETYPE_IS_NOT_EXISTS:
-      code = -3004
+      code = 400
       msg = '传入了不存在的房型'
       break
     case LABLE_IS_NOT_EXISTS:
-      code = -3005
+      code = 400
       msg = '传入了不存在的标签'
       break
     case REVIEW_IS_NOT_EXISTS:
-      code = -3006
+      code = 400
       msg = '传入了不存在的评价'
       break
     case REMARK_IS_NOT_EXISTS:
-      code = -3007
+      code = 400
       msg = '不存在该备注'
       break
     case INVALID_FILE_TYPE:
-      code = -2002
+      code = 400
       msg = '存在错误的文件类型'
       break
     case AVATAR_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `avatarUrl参数长度不得超过${USER_AVATAR_LENGTH}`
       break
     case PET_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `pet参数长度不得超过${USER_PET_LENGTH}`
       break
     case CAREER_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `carrer参数长度不得超过${USER_CAREER_LENGTH}`
       break
     case SCHOOL_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `school参数长度不得超过${USER_SCHOOL_LENGTH}`
       break
     case SKILL_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `skill参数长度不得超过${USER_SKILL_LENGTH}`
       break
     case PROFILE_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `profile参数长度不得超过${USER_PROFILE_LENGTH}`
       break
     case TITLE_LENGTH_EXCEEDS:

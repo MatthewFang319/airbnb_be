@@ -1,11 +1,12 @@
 const {
   DATA_INSERTION_FAILED,
-  LABLE_IS_NOT_EXISTS,
+  // LABLE_IS_NOT_EXISTS,
   INVALID_REQUEST_BODY,
   HOME_IS_NOT_EXISTS,
   USER_NOT_ADMIN,
   USER_IS_NOT_EXISTS,
-  UNKNOW_ERROR
+  UNKNOW_ERROR,
+  LABLE_IS_NOT_EXISTS
 } = require('../config/error')
 const collectionService = require('../service/collection.service')
 const homeService = require('../service/home.service')
@@ -27,12 +28,12 @@ class HomeController {
         })
       )
 
-      // 查询标签是否为存在,不存在则报错处理
-      await Promise.all(
-        content.labels.map(async item => {
-          return homeService.addLabel(homeId, item)
-        })
-      )
+      // // 查询标签是否为存在,不存在则报错处理
+      // await Promise.all(
+      //   content.labels.map(async item => {
+      //     return homeService.addLabel(homeId, item)
+      //   })
+      // )
 
       ctx.body = {
         code: 200,
@@ -42,15 +43,45 @@ class HomeController {
         }
       }
     } catch (error) {
-      if (
-        error.sql ===
-        'INSERT INTO `home_label` (home_id,label_id) VALUES (?, ?);'
-      )
-        return ctx.app.emit('error', LABLE_IS_NOT_EXISTS, ctx)
-
       return ctx.app.emit('error', DATA_INSERTION_FAILED, ctx)
     }
     // console.log(result)
+  }
+
+  async addLabel(ctx) {
+    const { homeId } = ctx.params
+    const { labelId } = ctx.request.body
+    try {
+      await homeService.addLabel(homeId, labelId)
+
+      ctx.body = {
+        code: 200,
+        msg: '添加成功',
+        data: null
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', LABLE_IS_NOT_EXISTS, ctx)
+    }
+  }
+
+  async deleteLabels(ctx) {
+    const { homeId } = ctx.params
+    const { labelId } = ctx.request.body
+    try {
+      const result = await homeService.deleteLabels(homeId, labelId)
+      console.log(result)
+      if (result.affectedRows === 0)
+        return ctx.app.emit('error', LABLE_IS_NOT_EXISTS, ctx)
+      ctx.body = {
+        code: 200,
+        msg: '删除成功',
+        data: null
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
+    }
   }
 
   async search(ctx) {
@@ -86,7 +117,7 @@ class HomeController {
     // 如果有传入图片，则删除图片
     for (let key in content) {
       try {
-        if (key === 'pictures' || key === 'labels') continue
+        if (key === 'pictures') continue
         // 修改常规内容
         await homeService.patch(homeId, key, content[key])
 

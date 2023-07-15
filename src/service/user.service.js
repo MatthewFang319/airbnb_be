@@ -84,6 +84,24 @@ class UserService {
     const [result] = await connection.execute(statement, [userId])
     return result
   }
+
+  // 查看用户的评价
+  async getUserReview(id) {
+    const statement = `
+    SELECT review.content as content, review.createAt as createTime,
+       (
+          SELECT JSON_OBJECT('id', user.id, 'avatar_url', user.avatar_url, 'username', user.username) 
+          FROM user 
+          WHERE user.id = review.user_id
+       ) AS user
+FROM user
+LEFT JOIN home ON user.id = home.user_id
+LEFT JOIN \`order\` ON home.id = order.home_id
+LEFT JOIN review ON order.id = review.order_id
+WHERE user.id = ? AND order.id IS NOT NULL AND review.content IS NOT NULL;`
+    const [result] = await connection.execute(statement, [id])
+    return result
+  }
 }
 
 module.exports = new UserService()

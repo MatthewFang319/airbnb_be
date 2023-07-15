@@ -39,6 +39,12 @@ class orderService {
     const [result] = await connection.execute(statement, [userId])
     return result
   }
+
+  async deleteOrder(order_id) {
+    const statement = 'DELETE FROM `order` WHERE id = ?'
+    const [result] = await connection.execute(statement, [order_id])
+    return result
+  }
 }
 
 module.exports = new orderService()

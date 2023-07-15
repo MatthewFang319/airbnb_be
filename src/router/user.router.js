@@ -3,7 +3,8 @@ const userRouter = new KoaRouter({ prefix: '/user' })
 const {
   updateInfo,
   getInfo,
-  checkUsername
+  checkUsername,
+  getUserReview
 } = require('../controller/user.controller')
 const { verifyAuth } = require('../middleware/login.middleware')
 const { checkParams } = require('../middleware/user.middleware')
@@ -16,5 +17,8 @@ userRouter.get('/:userId', getInfo)
 
 // 检查用户名是否存在
 userRouter.post('/username', checkUsername)
+
+// 查询用户的所有评价
+userRouter.get('/review/:userId', getUserReview)
 
 module.exports = userRouter

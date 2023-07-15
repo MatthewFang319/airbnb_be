@@ -35,7 +35,7 @@ class ReviewService {
   }
 
   // 查询某个房源的所有评价
-  async getHomeReview(homeId, size, offset) {
+  async getHomeReview(homeId, size = 10, offset = 0) {
     const statement = `SELECT 
       r.id 'reviewId',
       r.order_id 'orderId',
@@ -45,8 +45,6 @@ class ReviewService {
 			'avatar_url', u.avatar_url) 'user',
       r.content,
       r.star,
-      o.startTime,
-      o.endTime,
       r.createAt,
       r.updateAt
     FROM \`order\` o
@@ -60,7 +58,7 @@ class ReviewService {
 
   // 根据订单查询评价
   async getReviewByOrder(orderId, userId) {
-    const statement = `SELECT * FROM review WHERE order_id = ? AND user_id;`
+    const statement = `SELECT * FROM review WHERE order_id = ? AND user_id = ?;`
     const [result] = await connection.execute(statement, [orderId, userId])
     return result
   }

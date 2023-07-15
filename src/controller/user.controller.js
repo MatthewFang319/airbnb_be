@@ -1,4 +1,4 @@
-const { NAME_IS_ALREADY_EXISTS } = require('../config/error')
+const { NAME_IS_ALREADY_EXISTS, UNKNOW_ERROR } = require('../config/error')
 const userService = require('../service/user.service')
 
 class UserController {
@@ -71,6 +71,22 @@ class UserController {
         code: 200,
         msg: '该用户名不存在，可以注册'
       }
+    }
+  }
+
+  // 查询用户的所有评价
+  async getUserReview(ctx) {
+    const { userId } = ctx.params
+    try {
+      const result = await userService.getUserReview(userId)
+      ctx.body = {
+        code: 200,
+        msg: '获取成功',
+        data: result.length > 0 ? result : null
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
 }

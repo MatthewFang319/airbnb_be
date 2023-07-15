@@ -1,5 +1,5 @@
 // const { end } = require('../app/database')
-const { UNKNOW_ERROR } = require('../config/error')
+const { UNKNOW_ERROR, ORDER_IS_NOT_EXISTED } = require('../config/error')
 const orderService = require('../service/order.service')
 const { formatDate } = require('../utils/check-data')
 
@@ -65,6 +65,23 @@ class orderController {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async deleteOrder(ctx) {
+    const { orderId } = ctx.params
+    try {
+      const result = await orderService.deleteOrder(orderId)
+      if (result.affectedRows === 0)
+        return ctx.app.emit('error', ORDER_IS_NOT_EXISTED, ctx)
+      ctx.body = {
+        code: 200,
+        msg: '删除成功',
+        data: null
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
 }

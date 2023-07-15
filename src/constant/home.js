@@ -4,8 +4,7 @@ const HOME_PARAMS = [
   'price',
   'houseType_id',
   'pictures',
-  'tenant',
-  'labels'
+  'tenant'
 ]
 const HOME_TITLE_LENGTH = 20
 

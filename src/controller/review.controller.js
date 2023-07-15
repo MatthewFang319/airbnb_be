@@ -1,3 +1,4 @@
+const { UNKNOW_ERROR } = require('../config/error')
 const reviewService = require('../service/review.service')
 
 class ReviewController {
@@ -5,18 +6,24 @@ class ReviewController {
     const { orderId } = ctx.params
     const { content, star } = ctx.request.body
     const { id } = ctx.user
-    const result = await reviewService.getReviewByOrder(orderId, id)
-    if (result.length > 0) {
-      ctx.body = {
-        code: -2001,
-        msg: '你已评价该订单'
+    try {
+      const result = await reviewService.getReviewByOrder(orderId, id)
+      console.log(result, orderId, id)
+      if (result.length > 0) {
+        return (ctx.body = {
+          code: -2001,
+          msg: '你已评价该订单'
+        })
+      } else {
+        await reviewService.create(orderId, content, star, id)
+        return (ctx.body = {
+          code: 200,
+          msg: '评价成功'
+        })
       }
-    } else {
-      await reviewService.create(orderId, content, star, id)
-      ctx.body = {
-        code: 200,
-        msg: '评价成功'
-      }
+    } catch (error) {
+      console.log(error)
+      return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
 
@@ -41,8 +48,8 @@ class ReviewController {
 
   async getHomeReview(ctx) {
     const { homeId } = ctx.params
-    const { size, offset } = ctx.query
-    const data = await reviewService.getHomeReview(homeId, size, offset)
+    const { limit, offset } = ctx.query
+    const data = await reviewService.getHomeReview(homeId, limit, offset)
     ctx.body = {
       code: 200,
       msg: '查询成功',
