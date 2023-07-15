@@ -62,6 +62,7 @@ class CollectionService {
               'id', home.id, 
               'title', home.title, 
               'star', home.star, 
+              'reviewCount', (SELECT COUNT(*) FROM \`order\` o JOIN review r ON r.order_id = o.id WHERE o.home_id = home.id),
               'remark', CASE WHEN remark.id IS NOT NULL THEN JSON_OBJECT('id',remark.id,'content',remark.content) ELSE JSON_OBJECT() END,
               'pictures', (SELECT CASE WHEN COUNT(hp.id) != 0 THEN JSON_ARRAYAGG(hp.picture_url) ELSE JSON_ARRAY() END FROM home_picture AS hp WHERE hp.home_id = home.id)
             ))
@@ -94,8 +95,10 @@ class CollectionService {
               'id', home.id, 
               'title', home.title, 
               'star', home.star, 
+              'reviewCount', (SELECT COUNT(*) FROM \`order\` o JOIN review r ON r.order_id = o.id WHERE o.home_id = home.id),
               'remark', CASE WHEN remark.id IS NOT NULL THEN JSON_OBJECT('id',remark.id,'content',remark.content) ELSE JSON_OBJECT() END,
               'pictures', (SELECT CASE WHEN COUNT(hp.id) != 0 THEN JSON_ARRAYAGG(hp.picture_url) ELSE JSON_ARRAY() END FROM home_picture AS hp WHERE hp.home_id = home.id)
+            
             ))
             FROM home_collection AS hc 
             INNER JOIN home ON hc.home_id = home.id
@@ -118,7 +121,7 @@ class CollectionService {
     const statement = `SELECT hc.*
     FROM home_collection hc
     JOIN collection c on hc.collection_id = c.id
-    WHERE c.user_id = ? AND hc.home_id = ?; `
+    WHERE c.user_id = ? AND hc.home_id = ?;`
 
     const [result] = await connection.execute(statement, [userId, homeId])
 
