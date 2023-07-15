@@ -121,7 +121,7 @@ class HomeService {
   }
 
   async queryHomeType() {
-    const statement = 'SELECT l.id, l.name FROM label l ORDER BY l.id'
+    const statement = 'SELECT l.id, l.name FROM house_type l ORDER BY l.id'
     const [result] = await connection.execute(statement)
     console.log(result)
     return result
@@ -146,6 +146,7 @@ class HomeService {
   GROUP BY h.id
   LIMIT ? OFFSET ?;
     `
+
     const [result] = await (house_type === undefined
       ? connection.execute(statement, [String(limit), String(offset)])
       : connection.execute(statement, [
@@ -153,10 +154,37 @@ class HomeService {
           String(limit),
           String(offset)
         ]))
-    console.log(result)
+    // console.log(result)
     return result
   }
 
+  async quryHomeCount(house_type) {
+    const statement = `SELECT * FROM home h ${
+      house_type === undefined ? '' : 'WHERE h.houseType_id=?'
+    } `
+
+    const [result] = await (house_type === undefined
+      ? connection.execute(statement)
+      : connection.execute(statement, [String(house_type)]))
+
+    return result.length
+  }
+
+  async querySearchCount(keyword, houseType_id) {
+    const statement = `SELECT * FROM home h WHERE (title LIKE ? OR introduce LIKE ?) ${
+      houseType_id === undefined ? '' : 'AND houseType_id = ?'
+    }
+  `
+    const [result] =
+      houseType_id === undefined
+        ? await connection.execute(statement, [`%${keyword}%`, `%${keyword}%`])
+        : await connection.execute(statement, [
+            `%${keyword}%`,
+            `%${keyword}%`,
+            houseType_id
+          ])
+    return result.length
+  }
   async queryUserHome(userId = 0) {
     const statement = `
     SELECT h.id id, h.title title, h.introduce introduce, h.star star,
