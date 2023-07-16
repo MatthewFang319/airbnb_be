@@ -1,7 +1,5 @@
 class sliderController {
   async getSlider(ctx) {
-    const randomNumber = Math.floor(Math.random() * 5) + 1
-
     const data = [
       {
         id: 1,
@@ -69,22 +67,6 @@ class sliderController {
           'https://s0.lgstatic.com/i/image6/M00/77/41/CioPOWImxGeAU8miAANef1RsM-g458.png'
       }
     ]
-
-    for (let i = 0; i < randomNumber; i++) {
-      data.push({
-        id: 2,
-        title: '全栈运营实操高薪课',
-        brief: '覆盖10大热门方向，系统进阶全栈技能',
-        brightPoints: [
-          '0基础无门槛，帮助小白快速上手',
-          '一线大厂专家亲授，实力打造金牌运营',
-          '爆款运营案例',
-          '高效增长方法论'
-        ],
-        pcLargeImage:
-          'https://s0.lgstatic.com/i/image6/M00/77/41/CioPOWImxGeAU8miAANef1RsM-g458.png'
-      })
-    }
 
     ctx.body = {
       code: 200,
