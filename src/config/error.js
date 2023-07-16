@@ -14,7 +14,10 @@ const HOUSETYPE_IS_NOT_EXISTS = 'houseType_is_not_exists'
 const LABLE_IS_NOT_EXISTS = 'label_is_not_exists'
 const REVIEW_IS_NOT_EXISTS = 'review_is_not_exists'
 const REMARK_IS_NOT_EXISTS = 'remark_is_not_exists'
+const AVATAR_IS_NOT_EXISTS = 'avatar_is_not_exists'
+const PICTURE_IS_NOT_EXISTS = 'picture_is_not_exists'
 const INVALID_FILE_TYPE = 'invalid_file_type'
+const INVALID_FILES_QUANTITY = 'invalid_file_quantity'
 const USERNAME_LENGTH_EXCEEDS = 'username_length_exceeds'
 const AVATAR_LENGTH_EXCEEDS = 'avatarUrl_length_exceeds'
 const PET_LENGTH_EXCEEDS = 'pet_length_exceeds'
@@ -26,6 +29,7 @@ const COLLECTION_NAME_LENGTH_EXCEEDS = 'collection_name_length_exceeds'
 const REMARK_CONTENT_LENGTH_EXCEEDS = 'remark_content_length_exceeds'
 const REVIEW_CONTENT_LENGTH_EXCEEDS = 'review_content_length_exceeds'
 const FILE_SIZE_IS_TOO_LARGE = 'file_size_is_too_large'
+const LIMIT_UNEXPECTED_FILE = 'limit_unexpected_file'
 const DATA_INSERTION_FAILED = 'data_insertion_failed'
 const TITLE_LENGTH_EXCEEDS = 'title_length_exceeds'
 const MISSING_REQUIRED_PARAMS = 'missing_required_params'
@@ -72,7 +76,10 @@ module.exports = {
   LABLE_IS_NOT_EXISTS,
   REVIEW_IS_NOT_EXISTS,
   REMARK_IS_NOT_EXISTS,
+  AVATAR_IS_NOT_EXISTS,
+  PICTURE_IS_NOT_EXISTS,
   INVALID_FILE_TYPE,
+  INVALID_FILES_QUANTITY,
   USERNAME_LENGTH_EXCEEDS,
   AVATAR_LENGTH_EXCEEDS,
   PET_LENGTH_EXCEEDS,
@@ -84,5 +91,6 @@ module.exports = {
   REMARK_CONTENT_LENGTH_EXCEEDS,
   REVIEW_CONTENT_LENGTH_EXCEEDS,
   FILE_SIZE_IS_TOO_LARGE,
+  LIMIT_UNEXPECTED_FILE,
   DATA_INSERTION_FAILED
 }

@@ -41,13 +41,13 @@ class FileService {
   async queryAvatar(id) {
     const statement = 'SELECT * FROM avatar WHERE id = ?;'
     const [result] = await connection.execute(statement, [id])
-    return result[0]
+    return result
   }
 
   async queryPicture(id) {
     const statement = 'SELECT * FROM picture WHERE id = ?;'
     const [result] = await connection.execute(statement, [id])
-    return result[0]
+    return result
   }
 }
 
