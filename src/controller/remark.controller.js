@@ -13,9 +13,16 @@ class RemarkController {
     const isExists = await collectionService.hasHome(collectionId, homeId)
     if (!isExists) {
       ctx.body = {
-        code: -2004,
+        code: 400,
         msg: '心愿单中不存在该房源'
       }
+    }
+    const isExists2 = await remarkService.hasRemark(collectionId, homeId)
+    if (isExists2) {
+      return (ctx.body = {
+        code: 400,
+        msg: '心愿单中该房源已有备注'
+      })
     }
     if (!checkLength(REMARK_CONTENT_LENGTH, remark))
       return ctx.app.emit('error', REMARK_CONTENT_LENGTH_EXCEEDS, ctx)

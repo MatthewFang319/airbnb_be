@@ -21,7 +21,7 @@ class FileController {
       return ctx.app.emit('error', INVALID_FILE_TYPE, ctx)
     } else if (overflow) {
       ctx.body = {
-        code: -2009,
+        code: 400,
         msg: '图片文件大小不可超过200M'
       }
     } else {

@@ -12,16 +12,20 @@ class CollectionController {
     const { id } = ctx.user
     if (!checkLength(COLLECTION_NAME_LENGTH, name))
       return ctx.app.emit('error', COLLECTION_NAME_LENGTH_EXCEEDS, ctx)
-    await collectionService.create(name, id)
+    const result = await collectionService.create(name, id)
+    console.log(result)
     ctx.body = {
       code: 200,
-      msg: '创建心愿单成功'
+      msg: '创建心愿单成功',
+      data: {
+        id: result.insertId,
+        name
+      }
     }
   }
 
   async update(ctx) {
     const { name, collectionId } = ctx.request.body
-    const { id } = ctx.user
     try {
       if (!checkLength(COLLECTION_NAME_LENGTH, name))
         return ctx.app.emit('error', COLLECTION_NAME_LENGTH_EXCEEDS, ctx)
@@ -29,8 +33,7 @@ class CollectionController {
       await collectionService.update(name, collectionId)
       const data = {
         id: collectionId,
-        name: name,
-        userId: id
+        name: name
       }
       ctx.body = {
         code: 200,
@@ -58,7 +61,7 @@ class CollectionController {
     const isExists = await collectionService.hasHome(collectionId, homeId)
     if (isExists) {
       ctx.body = {
-        code: -2003,
+        code: 400,
         msg: '心愿单中已有该房源'
       }
     } else {
@@ -83,7 +86,7 @@ class CollectionController {
     const isExists = await collectionService.hasHome(collectionId, homeId)
     if (!isExists) {
       ctx.body = {
-        code: -2004,
+        code: 400,
         msg: '心愿单中不存在该房源'
       }
     } else {

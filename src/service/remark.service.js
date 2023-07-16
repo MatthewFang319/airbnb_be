@@ -27,6 +27,12 @@ class RemarkService {
     return result
   }
 
+  async hasRemark(collectionId, homeId) {
+    const statement = `SELECT * FROM remark WHERE collection_id = ? AND home_id = ?`
+    const [result] = await connection.execute(statement, [collectionId, homeId])
+    return result[0]
+  }
+
   // 获取备注内容
   async getRemark(remarkId) {
     const statement = `SELECT * FROM remark WHERE id = ?`

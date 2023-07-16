@@ -187,15 +187,15 @@ app.on('error', (error, ctx) => {
       msg = `profile参数长度不得超过${USER_PROFILE_LENGTH}`
       break
     case COLLECTION_NAME_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `收藏夹名称长度不得超过${COLLECTION_NAME_LENGTH}`
       break
     case REMARK_CONTENT_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `备注内容长度不得超过${REMARK_CONTENT_LENGTH}`
       break
     case REVIEW_CONTENT_LENGTH_EXCEEDS:
-      code = -2003
+      code = 400
       msg = `评价内容长度不得超过${REVIEW_CONTENT_LENGTH}`
       break
     case TITLE_LENGTH_EXCEEDS:

@@ -55,7 +55,7 @@ class UserController {
       }
     } catch (err) {
       ctx.body = {
-        code: -2000,
+        code: 400,
         msg: '传入参数不合理'
       }
     }

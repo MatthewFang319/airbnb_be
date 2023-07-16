@@ -13,7 +13,7 @@ class ReviewController {
       const result = await reviewService.getReviewByOrder(orderId, id)
       if (result.length > 0) {
         ctx.body = {
-          code: -2001,
+          code: 400,
           msg: '你已评价该订单'
         }
       } else {
