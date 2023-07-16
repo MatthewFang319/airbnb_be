@@ -100,6 +100,7 @@ class CollectionService {
               'pictures', (SELECT CASE WHEN COUNT(hp.id) != 0 THEN JSON_ARRAYAGG(hp.picture_url) ELSE JSON_ARRAY() END FROM home_picture AS hp WHERE hp.home_id = home.id)
             
             ))
+            
             FROM home_collection AS hc 
             INNER JOIN home ON hc.home_id = home.id
             LEFT JOIN remark ON hc.collection_id = remark.collection_id AND hc.home_id = remark.home_id

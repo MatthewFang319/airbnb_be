@@ -6,7 +6,8 @@ const connectionPool = mysql.createPool({
   database: 'airbnb',
   user: 'root',
   password: 'Cws88895865!',
-  connectionLimit: 5
+  connectionLimit: 7,
+  connectTimeout: 10000 // 增加连接超时时间为10秒
 })
 
 connectionPool.getConnection((err, connection) => {

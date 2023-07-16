@@ -34,8 +34,16 @@ class orderService {
   }
 
   async queryUserOrder(userId) {
-    const statement =
-      'SELECT o.id id, o.home_id homeId, o.startTime startTime, o.endTime endTime FROM `order` o WHERE user_id = ?'
+    const statement = `	SELECT 
+     o.id AS orderId, 
+     o.home_id AS homeId, 
+     o.startTime AS startTime, 
+     o.endTime AS endTime,
+     IF(COUNT(r.order_id) > 0, 1, 0) AS isReview
+ FROM \`order\` o
+ LEFT JOIN review r ON o.id = r.order_id
+ WHERE o.user_id = ?
+ GROUP BY o.id, o.home_id, o.startTime, o.endTime`
     const [result] = await connection.execute(statement, [userId])
     return result
   }
