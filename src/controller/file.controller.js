@@ -3,13 +3,21 @@ const fileService = require('../service/file.service')
 const userService = require('../service/user.service')
 const { SERVER_PORT, SERVER_HOST } = require('../config/server')
 const { UPLOAD_PATH } = require('../config/path')
-const { INVALID_FILE_TYPE } = require('../config/error')
+const {
+  INVALID_FILE_TYPE,
+  AVATAR_IS_NOT_EXISTS,
+  INVALID_FILES_QUANTITY,
+  PICTURE_IS_NOT_EXISTS
+} = require('../config/error')
 
 class FileController {
   // 上传图片
   async uploadPictures(ctx) {
     // 获取对应的信息
     const pictures = ctx.request.files
+    if (!pictures.length) {
+      return ctx.app.emit('error', INVALID_FILES_QUANTITY, ctx)
+    }
     // 存储图片信息
     let overflow = 0
     let wrongType = 0
@@ -43,7 +51,10 @@ class FileController {
   async showPicture(ctx) {
     const { id } = ctx.params
     const result = await fileService.queryPicture(id)
-    const { filename, mimetype } = result
+    if (!result.length) {
+      return ctx.app.emit('error', PICTURE_IS_NOT_EXISTS, ctx)
+    }
+    const { filename, mimetype } = result[0]
     ctx.type = mimetype
     ctx.body = fs.createReadStream(`${UPLOAD_PATH}/${filename}`)
   }
@@ -78,7 +89,10 @@ class FileController {
   async showAvatarImage(ctx) {
     const { id } = ctx.params
     const result = await fileService.queryAvatar(id)
-    const { filename, mimetype } = result
+    if (!result.length) {
+      return ctx.app.emit('error', AVATAR_IS_NOT_EXISTS, ctx)
+    }
+    const { filename, mimetype } = result[0]
     ctx.type = mimetype
     ctx.body = fs.createReadStream(`${UPLOAD_PATH}/${filename}`)
   }

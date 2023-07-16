@@ -43,7 +43,11 @@ const {
   REMARK_CONTENT_LENGTH,
   REVIEW_CONTENT_LENGTH,
   REVIEW_CONTENT_LENGTH_EXCEEDS,
-  REMARK_CONTENT_LENGTH_EXCEEDS
+  REMARK_CONTENT_LENGTH_EXCEEDS,
+  LIMIT_UNEXPECTED_FILE,
+  AVATAR_IS_NOT_EXISTS,
+  INVALID_FILES_QUANTITY,
+  PICTURE_IS_NOT_EXISTS
 } = require('../config/error')
 
 const {
@@ -154,9 +158,22 @@ app.on('error', (error, ctx) => {
       code = 400
       msg = '不存在该备注'
       break
+    case AVATAR_IS_NOT_EXISTS:
+      code = 400
+      msg = '不存在该头像'
+      break
+    case PICTURE_IS_NOT_EXISTS:
+      code = 400
+      msg = '不存在该图片'
+      break
     case INVALID_FILE_TYPE:
       code = 400
       msg = '存在错误的文件类型'
+      break
+    case LIMIT_UNEXPECTED_FILE:
+    case INVALID_FILES_QUANTITY:
+      code = 400
+      msg = '上传的文件数量有误'
       break
     case USERNAME_LENGTH_EXCEEDS:
       code = -2003
