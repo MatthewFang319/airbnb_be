@@ -219,16 +219,23 @@ class HomeController {
   async getAdminHome(ctx) {
     try {
       const { userId } = ctx.params
+      const { offset, limit } = ctx.query
       const userIdentity = await checkAdmin(userId)
       if (!userIdentity) {
         return ctx.app.emit('error', USER_NOT_ADMIN, ctx)
       }
-      const result = await homeService.queryUserHome(userId)
-
+      const result = await homeService.queryUserHome(userId, offset, limit)
+      const count = await homeService.queryUserHomeCount(userId)
+      const hasMore = Number(result.length) + Number(offset) < Number(count)
       ctx.body = {
         code: 200,
         msg: '获取成功',
-        data: result
+        data: {
+          homeList: result.length > 0 ? result : null,
+          totalCount: count,
+          size: result.length,
+          hasMore: hasMore
+        }
       }
     } catch (error) {
       console.log(error)

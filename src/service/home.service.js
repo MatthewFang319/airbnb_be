@@ -185,7 +185,7 @@ class HomeService {
           ])
     return result.length
   }
-  async queryUserHome(userId = 0) {
+  async queryUserHome(userId = 0, offset = 0, limit = 20) {
     const statement = `
     SELECT h.id id, h.title title, h.introduce introduce, h.star star,
     CASE WHEN hp.home_id IS NULL THEN NULL
@@ -194,10 +194,28 @@ class HomeService {
   FROM home h
   LEFT JOIN home_picture hp ON h.id = hp.home_id
   WHERE h.user_id = ?
-  GROUP BY h.id;
+  GROUP BY h.id
+  LIMIT ? OFFSET ?;
     `
-    const [result] = await connection.execute(statement, [userId])
+    const [result] = await connection.execute(statement, [
+      userId,
+      limit,
+      offset
+    ])
     return result
+  }
+  async queryUserHomeCount(userId) {
+    const statement = `
+    SELECT h.id id, h.title title, h.introduce introduce, h.star star,
+    CASE WHEN hp.home_id IS NULL THEN NULL
+        ELSE JSON_ARRAYAGG(hp.picture_url)
+    END pictures
+  FROM home h
+  LEFT JOIN home_picture hp ON h.id = hp.home_id
+  WHERE h.user_id = ?
+  GROUP BY h.id;`
+    const [result] = await connection.execute(statement, [userId])
+    return result.length
   }
 }
 
