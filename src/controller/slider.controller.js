@@ -54,7 +54,7 @@ class sliderController {
           'https://s0.lgstatic.com/i/image/M00/8C/FB/Ciqc1F_29CqANbTVAAX3gTVQL4Q567.png'
       },
       {
-        id: 25,
+        id: 5,
         title: '商业分析高薪课',
         brief: '构建商业思维，提升业务大局观',
         brightPoints: [
