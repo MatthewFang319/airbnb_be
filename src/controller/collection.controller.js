@@ -116,7 +116,7 @@ class CollectionController {
     ctx.body = {
       code: 200,
       msg: '获取成功',
-      data: result
+      data: result.length > 0 ? result[0] : null
     }
   }
 

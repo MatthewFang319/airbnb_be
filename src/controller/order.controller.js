@@ -16,7 +16,7 @@ class orderController {
         code: 200,
         msg: '订单成功',
         data: {
-          order_id: result.insertId
+          orderId: result.insertId
         }
       }
     } catch (error) {

@@ -10,7 +10,7 @@ class HomeService {
       content.title,
       content.introduce,
       content.price,
-      content.houseType_id,
+      content.houseTypeId,
       content.tenant
     ])
     return result
@@ -45,7 +45,7 @@ class HomeService {
     return result
   }
 
-  async search(keyword, offset = 0, limit = 20, houseType_id) {
+  async search(keyword, offset = '0', limit = '20', houseType_id) {
     const statement = `SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star,
     COUNT(r.id) reviewCount,
     JSON_OBJECT('id', ht.id, 'name', ht.name) houseType,
@@ -127,7 +127,7 @@ class HomeService {
     return result
   }
 
-  async quryHome(offset = 0, limit = 10, house_type) {
+  async quryHome(offset = '0', limit = '10', house_type) {
     const statement = `
     SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star,
     COUNT(r.id) reviewCount,
@@ -185,7 +185,7 @@ class HomeService {
           ])
     return result.length
   }
-  async queryUserHome(userId = 0, offset = 0, limit = 20) {
+  async queryUserHome(userId = '0', offset = '0', limit = '20') {
     const statement = `
     SELECT h.id id, h.title title, h.introduce introduce, h.star star,
     CASE WHEN hp.home_id IS NULL THEN NULL

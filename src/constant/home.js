@@ -2,11 +2,11 @@ const HOME_PARAMS = [
   'title',
   'introduce',
   'price',
-  'houseType_id',
+  'houseTypeId',
   'pictures',
   'tenant'
 ]
-const HOME_TITLE_LENGTH = 20
+const HOME_TITLE_LENGTH = 60
 
 module.exports = {
   HOME_PARAMS,

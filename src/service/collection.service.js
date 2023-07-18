@@ -79,7 +79,7 @@ class CollectionService {
     WHERE collection.id = ?
     GROUP BY collection.id;`
     const [result] = await connection.execute(statement, [id])
-    return result[0]
+    return result
   }
 
   // 获取用户的心愿单列表

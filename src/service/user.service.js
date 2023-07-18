@@ -90,7 +90,7 @@ class UserService {
     const statement = `
     SELECT review.content as content, review.createAt as createTime,
        (
-          SELECT JSON_OBJECT('id', user.id, 'avatar_url', user.avatar_url, 'username', user.username) 
+          SELECT JSON_OBJECT('id', user.id, 'avatarUrl', user.avatar_url, 'username', user.username) 
           FROM user 
           WHERE user.id = review.user_id
        ) AS user

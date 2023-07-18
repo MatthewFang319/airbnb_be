@@ -35,13 +35,13 @@ class ReviewService {
   }
 
   // 查询某个房源的所有评价
-  async getHomeReview(homeId, size = 10, offset = 0) {
+  async getHomeReview(homeId, size = '20', offset = '0') {
     const statement = `SELECT 
       r.id 'reviewId',
       JSON_OBJECT(
 			'userId', u.id,
 			'username', u.username,
-			'avatar_url', u.avatar_url) 'user',
+			'avatarUrl', u.avatar_url) 'user',
       r.content,
       r.star,
       r.createAt,

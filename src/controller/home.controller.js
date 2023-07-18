@@ -72,7 +72,7 @@ class HomeController {
       const result = await homeService.deleteLabels(homeId, labelId)
       console.log(result)
       if (result.affectedRows === 0)
-        return ctx.app.emit('error', LABLE_IS_NOT_EXISTS, ctx)
+        return ctx.app.emit('error', UNKNOW_ERROR, ctx)
       ctx.body = {
         code: 200,
         msg: '删除成功',
@@ -220,6 +220,7 @@ class HomeController {
     try {
       const { userId } = ctx.params
       const { offset, limit } = ctx.query
+      console.log(offset, limit, userId)
       const userIdentity = await checkAdmin(userId)
       if (!userIdentity) {
         return ctx.app.emit('error', USER_NOT_ADMIN, ctx)
