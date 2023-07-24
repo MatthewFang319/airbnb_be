@@ -72,13 +72,19 @@ const getTokenUser = async (ctx, next) => {
   // 1.获取token中信息
   else {
     const token = authorization.replace('Bearer ', '')
-    const result = jwt.verify(token, PUBLIC_KEY, {
-      algorithms: ['RS256']
-    })
-    // 2.将token的信息保留下来
-    ctx.user = result
-    // 3.执行下一个中间件
-    await next()
+    try {
+      // 1.获取token中信息
+      const result = jwt.verify(token, PUBLIC_KEY, {
+        algorithms: ['RS256']
+      })
+      // 2.将token的信息保留下来
+      ctx.user = result
+      // 3.执行下一个中间件
+      await next()
+    } catch (error) {
+      console.log(error)
+      ctx.app.emit('error', UNAUTHORIZATION, ctx)
+    }
   }
 }
 module.exports = {

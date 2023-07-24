@@ -46,19 +46,25 @@ class HomeService {
   }
 
   async search(keyword, offset = '0', limit = '20', houseType_id) {
-    const statement = `SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star,
+    const statement = `	 SELECT h.id id, h.title title, h.introduce introduce, h.price price, h.star star, 
     COUNT(r.id) reviewCount,
     JSON_OBJECT('id', ht.id, 'name', ht.name) houseType,
       CASE WHEN hp.home_id IS NULL THEN NULL
     ELSE JSON_ARRAYAGG(hp.picture_url)
-  END pictures,
+		  END pictures,
+    (
+      SELECT JSON_ARRAYAGG(JSON_OBJECT('id', l.id, 'name', l.name))
+      FROM home_label hl
+      JOIN label l ON hl.label_id = l.id
+      WHERE hl.home_id = h.id
+    ) labels,
     JSON_OBJECT('id', u.id, 'name', u.username, 'avatarURL', u.avatar_url) user
   FROM home h
   LEFT JOIN user u ON u.id = h.user_id
   LEFT JOIN house_type ht ON h.houseType_id = ht.id
   LEFT JOIN home_picture hp ON h.id = hp.home_id
   LEFT JOIN \`order\` o ON h.id = o.home_id
-  LEFT JOIN review r ON o.id = r.order_id  
+  LEFT JOIN review r ON o.id = r.order_id   
   WHERE (title LIKE ? OR introduce LIKE ?) ${
     houseType_id === undefined ? '' : 'AND houseType_id = ?'
   }

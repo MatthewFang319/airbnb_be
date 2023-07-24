@@ -5,8 +5,7 @@ const {
   HOME_IS_NOT_EXISTS,
   USER_NOT_ADMIN,
   USER_IS_NOT_EXISTS,
-  UNKNOW_ERROR,
-  LABLE_IS_NOT_EXISTS
+  UNKNOW_ERROR
 } = require('../config/error')
 const collectionService = require('../service/collection.service')
 const homeService = require('../service/home.service')
@@ -61,7 +60,10 @@ class HomeController {
       }
     } catch (error) {
       console.log(error)
-      return ctx.app.emit('error', LABLE_IS_NOT_EXISTS, ctx)
+      return (ctx.body = {
+        code: 400,
+        msg: '标签不存在或房源已有该标签'
+      })
     }
   }
 
