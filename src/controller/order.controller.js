@@ -84,6 +84,13 @@ class orderController {
       return ctx.app.emit('error', UNKNOW_ERROR, ctx)
     }
   }
+
+  async checkDateCon(ctx) {
+    ctx.body = {
+      code: 200,
+      msg: '该时间段可预约'
+    }
+  }
 }
 
 module.exports = new orderController()

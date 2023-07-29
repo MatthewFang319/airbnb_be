@@ -3,7 +3,8 @@ const {
   create,
   get,
   getUser,
-  deleteOrder
+  deleteOrder,
+  checkDateCon
 } = require('../controller/order.controller')
 const { verifyAuth } = require('../middleware/login.middleware')
 const {
@@ -26,4 +27,5 @@ orderRouter.post(
   create
 )
 orderRouter.delete('/:orderId', verifyAuth, verifyPermission, deleteOrder)
+orderRouter.post('/date', verifyAuth, checkOrderAuth, checkDate, checkDateCon)
 module.exports = orderRouter
