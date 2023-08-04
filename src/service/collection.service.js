@@ -85,29 +85,29 @@ class CollectionService {
   // 获取用户的心愿单列表
   async getList(userId) {
     const statement = `SELECT 
-      collection.id,
-      collection.name,
-      COUNT(home.id) AS 'count',
-      CASE
-        WHEN COUNT(home.id) != 0 THEN (
-          SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-              'id', home.id, 
-              'title', home.title, 
-              'pictures', (SELECT CASE WHEN COUNT(hp.id) != 0 THEN JSON_ARRAYAGG(hp.picture_url) ELSE JSON_ARRAY() END FROM home_picture AS hp WHERE hp.home_id = home.id)
-            ))
-            
-            FROM home_collection AS hc 
-            INNER JOIN home ON hc.home_id = home.id
-            WHERE collection.id = hc.collection_id
-          )
-        ELSE JSON_ARRAY()
-      END AS 'homes'
-    FROM collection
-    INNER JOIN home_collection AS hc ON collection.id = hc.collection_id
-    INNER JOIN home ON hc.home_id = home.id
-    WHERE collection.user_id = ?
-    GROUP BY collection.id;`
+    collection.id,
+    collection.name,
+    COUNT(home.id) AS 'count',
+    CASE
+      WHEN COUNT(home.id) != 0 THEN (
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', home.id, 
+            'title', home.title, 
+            'pictures', (SELECT CASE WHEN COUNT(hp.id) != 0 THEN JSON_ARRAYAGG(hp.picture_url) ELSE JSON_ARRAY() END FROM home_picture AS hp WHERE hp.home_id = home.id)
+          ))
+          
+          FROM home_collection AS hc 
+          INNER JOIN home ON hc.home_id = home.id
+          WHERE collection.id = hc.collection_id
+        )
+      ELSE JSON_ARRAY()
+    END AS 'homes'
+  FROM collection
+  LEFT JOIN home_collection AS hc ON collection.id = hc.collection_id AND hc.collection_id IS NOT NULL
+  LEFT JOIN home ON hc.home_id = home.id
+  WHERE collection.user_id = ?
+  GROUP BY collection.id;`
     const [result] = await connection.execute(statement, [userId])
     return result
   }
