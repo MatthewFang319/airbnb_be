@@ -3,7 +3,8 @@ const { verifyAuth } = require('../middleware/login.middleware')
 const {
   create,
   updateReview,
-  deleteReview
+  deleteReview,
+  queryByOrderId
 } = require('../controller/review.controller')
 const { verifyPermission } = require('../middleware/permission.middleware')
 
@@ -23,4 +24,6 @@ reviewRouter.post(
 // 删除评价
 reviewRouter.del('/:reviewId', verifyAuth, verifyPermission, deleteReview)
 
+// 根据订单id获取评价
+reviewRouter.get('/order/:orderId', verifyAuth, queryByOrderId)
 module.exports = reviewRouter
