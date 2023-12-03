@@ -128,7 +128,7 @@ class CollectionController {
     // result.map(item => {
     //   item.homes.map(innerItem => {
     //     if (innerItem.remark.id == null) {
-    //       innerItem.remark = null
+    //       innerItem.remark = nu ll
     //     }
     //   })
     // })

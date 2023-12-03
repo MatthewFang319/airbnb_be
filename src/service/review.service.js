@@ -71,6 +71,11 @@ class ReviewService {
     const [result] = await connection.execute(statement, [orderId, userId])
     return result
   }
+  async forQueryReviewByOrder(orderId, userId) {
+    const statement = `SELECT * FROM review WHERE user_id = ? AND order_id = ?;`
+    const [result] = await connection.execute(statement, [userId, orderId])
+    return result
+  }
 }
 
 module.exports = new ReviewService()

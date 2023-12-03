@@ -10,6 +10,7 @@ const verifyCollectAuth = async (ctx, next) => {
   const { id } = ctx.user
   const { collectionId } = ctx.request.body
   const result = await collectionService.getCollectionById(collectionId)
+  console.log(id, collectionId)
   if (!result) {
     // 该心愿单不存在
     return ctx.app.emit('error', COLLECTION_IS_NOT_EXISTS, ctx)

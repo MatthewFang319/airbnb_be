@@ -19,10 +19,19 @@ class ReviewController {
       } else {
         if (!checkLength(REVIEW_CONTENT_LENGTH, content))
           return ctx.app.emit('error', REVIEW_CONTENT_LENGTH_EXCEEDS, ctx)
-        await reviewService.create(orderId, content, star, id)
+        const createResult = await reviewService.create(
+          orderId,
+          content,
+          star,
+          id
+        )
+
         ctx.body = {
           code: 200,
-          msg: '评价成功'
+          msg: '评价成功',
+          data: {
+            reviewId: createResult.insertId
+          }
         }
       }
     } catch (error) {
@@ -67,6 +76,32 @@ class ReviewController {
         size: data.length,
         hasMore: hasMore
       }
+    }
+  }
+
+  async queryByOrderId(ctx) {
+    const { orderId } = ctx.params
+    const { id } = ctx.user
+    try {
+      const result = await reviewService.forQueryReviewByOrder(orderId, id)
+      if (result.length <= 0)
+        ctx.body = {
+          code: 400,
+          msg: '暂未评价或无权限'
+        }
+      else {
+        ctx.body = {
+          code: 200,
+          msg: '获取成功',
+          data: {
+            reviewId: result[0].id,
+            content: result[0].content,
+            star: result[0].star
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 }

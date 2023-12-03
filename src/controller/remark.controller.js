@@ -11,11 +11,12 @@ class RemarkController {
 
     // 判断该心愿单是否存在该房源
     const isExists = await collectionService.hasHome(collectionId, homeId)
+    console.log(isExists)
     if (!isExists) {
-      ctx.body = {
+      return (ctx.body = {
         code: 400,
         msg: '心愿单中不存在该房源'
-      }
+      })
     }
     const isExists2 = await remarkService.hasRemark(collectionId, homeId)
     if (isExists2) {
